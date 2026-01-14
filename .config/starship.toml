@@ -88,7 +88,7 @@ format = '[$path]($style)[$read_only]($read_only_style)'
 truncation_length = 3
 truncation_symbol = '…/'
 truncate_to_repo = false
-read_only = " 󰌾"
+read_only = "󰌾 "
 read_only_style = "red"
 
 [directory.substitutions]
@@ -96,6 +96,13 @@ read_only_style = "red"
 
 [fill]
 symbol = ' '
+
+[cmd_duration]
+min_time = 2_000
+format =" [$duration]($style) "
+style ="yellow bold"
+show_notifications = true
+min_time_to_notify = 60_000
 
 # === Git Modules ===
 [git_branch]
@@ -162,11 +169,6 @@ symbol = ' '
 style = 'red'
 number_threshold = 1
 format = '[$symbol]($style)'
-
-[cmd_duration]
-min_time = 500
-style = 'dark_gray'
-format = '[$duration]($style)'
 
 # === Nerd Font Symbols Preset ===
 # This preset is copied from: https://starship.rs/presets/nerd-font
