@@ -84,28 +84,37 @@ git_conflicted = "#F92672"
 
 [directory]
 style = 'bold cyan'
-format = '[$path ]($style)'
+format = '[$path]($style)[$read_only]($read_only_style)'
 truncation_length = 3
 truncation_symbol = '…/'
 truncate_to_repo = false
+read_only = "  "
+read_only_style = "red"
 
 [directory.substitutions]
-'Documents' = '󰈙'
-'Downloads' = ' '
-'Music' = ' '
-'Pictures' = ' '
+'/Volumes/External' = 'Ext'
 
+[fill]
+symbol = ' '
+
+# === Git Modules ===
 [git_branch]
 style = 'green'
-symbol = ' '
+symbol = ' '
 format = '[on](fg) [$symbol$branch ]($style)'
+
+[git_commit]
+tag_symbol = '  '
 
 [git_status]
 style = 'red'
 format = '([$all_status$ahead_behind]($style) )'
 
-[fill]
-symbol = ' '
+# === Language Specific Modules ===
+[aws]
+symbol = ' '
+style = 'yellow'
+format = '[$symbol($profile )(\[$duration\] )]($style)'
 
 [python]
 style = 'cyan'
@@ -140,11 +149,6 @@ symbol = ' '
 
 [package]
 symbol = '󰏗 '
-
-[aws]
-symbol = ' '
-style = 'yellow'
-format = '[$symbol($profile )(\[$duration\] )]($style)'
 
 [docker_context]
 symbol = ' '
