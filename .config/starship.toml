@@ -19,11 +19,71 @@ $cmd_duration\
 $line_break\
 $character"""
 
+right_format = ""
 add_newline = true
-palette = "onedark"
+palette = "monokai"
+
+[palettes.monokai]
+# === Default Monokai Palette ===
+red = "#F92672"
+orange = "#FD971F"
+yellow = "#E6DB74"
+green = "#A6E22E"
+cyan = "#66D9EF"
+purple = "#AE81FF"
+
+# === Background and Foreground Colors ===
+bg = "#272822"
+bg_dark = "#1e1f1c"
+bg_selection = "#49483E"
+bg_line = "#3E3D32"
+bg_statusbar = "#414339"
+fg = "#F8F8F2"
+fg_cursor = "#F8F8F0"
+fg_comment = "#75715E"
+fg_line_number = "#90908A"
+fg_line_number_active = "#C2C2BF"
+fg_sidebar = "#C2C2BF"
+
+# === Additional Colors ===
+guide = "#464741"
+guide_active = "#767771"
+whitespace = "#464741"
+bracket = "#888888"
+
+# === Alias Colors ===
+comment = "#75715E"
+string = "#E6DB74"
+number = "#AE81FF"
+keyword = "#F92672"
+type = "#66D9EF"
+function = "#A6E22E"
+parameter = "#FD971F"
+variable = "#F8F8F2"
+
+# === Status Colors ===
+success = "#A6E22E"
+warning = "#FD971F"
+error = "#F92672"
+info = "#66D9EF"
+
+# === Extended Colors ===
+white = "#F8F8F2"
+light_gray = "#C2C2BF"
+gray = "#90908A"
+dark_gray = "#75715E"
+black = "#1e1f1c"
+
+# === Git Colors ===
+git_added = "#A6E22E"
+git_modified = "#E6DB74"
+git_deleted = "#F92672"
+git_renamed = "#AE81FF"
+git_untracked = "#FD971F"
+git_conflicted = "#F92672"
 
 [directory]
-style = 'bold fg:dark_blue'
+style = 'bold cyan'
 format = '[$path ]($style)'
 truncation_length = 3
 truncation_symbol = '…/'
@@ -36,20 +96,20 @@ truncate_to_repo = false
 'Pictures' = ' '
 
 [git_branch]
-style = 'fg:green'
-symbol = ' '
-format = '[on](white) [$symbol$branch ]($style)'
+style = 'green'
+symbol = ' '
+format = '[on](fg) [$symbol$branch ]($style)'
 
 [git_status]
-style = 'fg:red'
+style = 'red'
 format = '([$all_status$ahead_behind]($style) )'
 
 [fill]
 symbol = ' '
 
 [python]
-style = 'teal'
-symbol = ' '
+style = 'cyan'
+symbol = ' '
 format = '[${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
 pyenv_version_name = true
 pyenv_prefix = ''
@@ -59,24 +119,24 @@ format = '[$symbol($version )]($style)'
 symbol = ' '
 
 [nodejs]
-style = 'blue'
-symbol = ' '
+style = 'green'
+symbol = ' '
 
 [golang]
-style = 'blue'
-symbol = ' '
+style = 'cyan'
+symbol = ' '
 
 [haskell]
-style = 'blue'
-symbol = ' '
+style = 'purple'
+symbol = ' '
 
 [rust]
 style = 'orange'
 symbol = ' '
 
 [ruby]
-style = 'blue'
-symbol = ' '
+style = 'red'
+symbol = ' '
 
 [package]
 symbol = '󰏗 '
@@ -87,8 +147,8 @@ style = 'yellow'
 format = '[$symbol($profile )(\[$duration\] )]($style)'
 
 [docker_context]
-symbol = ' '
-style = 'fg:#06969A'
+symbol = ' '
+style = 'cyan'
 format = '[$symbol]($style) $path'
 detect_files = ['docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']
 detect_extensions = ['Dockerfile']
@@ -101,31 +161,5 @@ format = '[$symbol]($style)'
 
 [cmd_duration]
 min_time = 500
-style = 'fg:gray'
+style = 'dark_gray'
 format = '[$duration]($style)'
-
-[palettes.nord]
-dark_blue = '#5E81AC'
-blue = '#81A1C1'
-teal = '#88C0D0'
-red = '#BF616A'
-orange = '#D08770'
-green = '#A3BE8C'
-yellow = '#EBCB8B'
-purple = '#B48EAD'
-gray = '#434C5E'
-black = '#2E3440'
-white = '#D8DEE9'
-
-[palettes.onedark]
-dark_blue = '#61afef'
-blue = '#56b6c2'
-red = '#e06c75'
-green = '#98c379'
-purple = '#c678dd'
-cyan = '#56b6c2'
-orange = '#be5046'
-yellow = '#e5c07b'
-gray = '#828997'
-white = '#abb2bf'
-black = '#2c323c'
