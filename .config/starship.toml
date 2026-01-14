@@ -77,8 +77,8 @@ symbol = ' '
 
 [cmd_duration]
 min_time = 2_000
-format =" [$duration]($style) "
-style ="yellow bold"
+format = " [$duration]($style) "
+style = "yellow bold"
 show_notifications = true
 min_time_to_notify = 60_000
 
@@ -161,6 +161,10 @@ symbol = ' '
 style = 'red'
 number_threshold = 1
 format = '[$symbol]($style)'
+
+[typst]
+format = '[$symbol($version )]($style)'
+style = "bold #0093A7"
 
 # === Nerd Font Symbols Preset ===
 # This preset is copied from: https://starship.rs/presets/nerd-font
