@@ -88,7 +88,7 @@ format = '[$path]($style)[$read_only]($read_only_style)'
 truncation_length = 3
 truncation_symbol = '…/'
 truncate_to_repo = false
-read_only = "  "
+read_only = " 󰌾"
 read_only_style = "red"
 
 [directory.substitutions]
@@ -112,46 +112,46 @@ format = '([$all_status$ahead_behind]($style) )'
 
 # === Language Specific Modules ===
 [aws]
-symbol = ' '
+symbol = ' '                                           # ' '
 style = 'yellow'
 format = '[$symbol($profile )(\[$duration\] )]($style)'
 
 [python]
 style = 'cyan'
-symbol = ' '
+symbol = " "
 format = '[${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
 pyenv_version_name = true
 pyenv_prefix = ''
 
 [lua]
 format = '[$symbol($version )]($style)'
-symbol = ' '
+symbol = " "
 
 [nodejs]
 style = 'green'
-symbol = ' '
+symbol = " "
 
 [golang]
 style = 'cyan'
-symbol = ' '
+symbol = " "
 
 [haskell]
 style = 'purple'
-symbol = ' '
+symbol = " "
 
 [rust]
 style = 'orange'
-symbol = ' '
+symbol = "󱘗 "
 
 [ruby]
 style = 'red'
-symbol = ' '
+symbol = " "
 
 [package]
 symbol = '󰏗 '
 
 [docker_context]
-symbol = ' '
+symbol = " "
 style = 'cyan'
 format = '[$symbol]($style) $path'
 detect_files = ['docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']
@@ -167,3 +167,172 @@ format = '[$symbol]($style)'
 min_time = 500
 style = 'dark_gray'
 format = '[$duration]($style)'
+
+# === Nerd Font Symbols Preset ===
+# This preset is copied from: https://starship.rs/presets/nerd-font
+# Modules that only has symbol customized are put below, other modules are put before this section.
+
+[buf]
+symbol = " "
+
+[bun]
+symbol = " "
+
+[c]
+symbol = " "
+
+[cpp]
+symbol = " "
+
+[cmake]
+symbol = " "
+
+[conda]
+symbol = " "
+
+[crystal]
+symbol = " "
+
+[dart]
+symbol = " "
+
+[deno]
+symbol = " "
+
+[elixir]
+symbol = " "
+
+[elm]
+symbol = " "
+
+[fennel]
+symbol = " "
+
+[fortran]
+symbol = " "
+
+[fossil_branch]
+symbol = " "
+
+[gcloud]
+symbol = " "
+
+[gradle]
+symbol = " "
+
+[guix_shell]
+symbol = " "
+
+[haxe]
+symbol = " "
+
+[hg_branch]
+symbol = " "
+
+[hostname]
+ssh_symbol = " "
+
+[java]
+symbol = " "
+
+[julia]
+symbol = " "
+
+[kotlin]
+symbol = " "
+
+[memory_usage]
+symbol = "󰍛 "
+
+[meson]
+symbol = "󰔷 "
+
+[nim]
+symbol = "󰆥 "
+
+[nix_shell]
+symbol = " "
+
+[ocaml]
+symbol = " "
+
+[os.symbols]
+Alpaquita = " "
+Alpine = " "
+AlmaLinux = " "
+Amazon = " "
+Android = " "
+AOSC = " "
+Arch = " "
+Artix = " "
+CachyOS = " "
+CentOS = " "
+Debian = " "
+DragonFly = " "
+Elementary = " "
+Emscripten = " "
+EndeavourOS = " "
+Fedora = " "
+FreeBSD = " "
+Garuda = "󰛓 "
+Gentoo = " "
+HardenedBSD = "󰞌 "
+Illumos = "󰈸 "
+Ios = "󰀷 "
+Kali = " "
+Linux = " "
+Mabox = " "
+Macos = " "
+Manjaro = " "
+Mariner = " "
+MidnightBSD = " "
+Mint = " "
+NetBSD = " "
+NixOS = " "
+Nobara = " "
+OpenBSD = "󰈺 "
+openSUSE = " "
+OracleLinux = "󰌷 "
+Pop = " "
+Raspbian = " "
+Redhat = " "
+RedHatEnterprise = " "
+RockyLinux = " "
+Redox = "󰀘 "
+Solus = "󰠳 "
+SUSE = " "
+Ubuntu = " "
+Unknown = " "
+Void = " "
+Windows = "󰍲 "
+Zorin = " "
+
+[perl]
+symbol = " "
+
+[php]
+symbol = " "
+
+[pijul_channel]
+symbol = " "
+
+[pixi]
+symbol = "󰏗 "
+
+[rlang]
+symbol = "󰟔 "
+
+[scala]
+symbol = " "
+
+[status]
+symbol = " "
+
+[swift]
+symbol = " "
+
+[xmake]
+symbol = " "
+
+[zig]
+symbol = " "
