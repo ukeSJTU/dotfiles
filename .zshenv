@@ -18,7 +18,7 @@ export https_proxy=http://127.0.0.1:7897 http_proxy=http://127.0.0.1:7897 all_pr
 # Themes (onedark or nord)
 export TMUX_THEME="onedark"
 # export NVIM_THEME="nord"
-export STARSHIP_THEME="onedark"
+export STARSHIP_THEME="monokai"
 # export WEZTERM_THEME="nord"
 
 # Use Neovim as default editor

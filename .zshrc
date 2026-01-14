@@ -1,20 +1,26 @@
-# Load Custom zsh
-[ -f "$HOME/.config/zsh/custom.zsh" ] && source "$HOME/.config/zsh/custom.zsh"
-
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/opt/miniconda3/bin/conda' 'shell.zsh' 'hook' 2>/dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/opt/miniconda3/etc/profile.d/conda.sh" ]; then
-        . "/opt/miniconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/opt/miniconda3/bin:$PATH"
+if [[ -f "/opt/homebrew/bin/brew" ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+    if [[ -f "$HOME/.config/homebrew/config" ]]; then
+        source "$HOME/.config/homebrew/config"
     fi
 fi
-unset __conda_setup
-# <<< conda initialize <<<
+
+
+PATH=~/.console-ninja/.bin:$PATH
+PATH="/Users/uke/perl5/bin${PATH:+:${PATH}}"; export PATH;
+PERL5LIB="/Users/uke/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
+PERL_LOCAL_LIB_ROOT="/Users/uke/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
+PERL_MB_OPT="--install_base \"/Users/uke/perl5\""; export PERL_MB_OPT;
+PERL_MM_OPT="INSTALL_BASE=/Users/uke/perl5"; export PERL_MM_OPT;
+
+export PATH='/Applications/Coq-Platform~8.20~2025.01.app/Contents/Resources/bin':"$PATH"
+export COQLIB="$(/Applications/Coq-Platform~8.20~2025.01.app/Contents/Resources/bin/coqc -where 2>/dev/null | tr -d '\r')"
+
+# We put PATH modifications before loading mise and zplug
+# So mise can override PATH if needed
+
+# Load mise, we use mise to manage node, python, rust, go etc.
+eval "$(mise activate zsh)"
 
 ####################################
 # Load zplug to manage zsh plugins #
@@ -36,8 +42,6 @@ zplug "plugins/alias-tips", from:oh-my-zsh
 zplug "plugins/common-aliases", from:oh-my-zsh
 zplug "Aloxaf/fzf-tab"
 
-# Add a bunch more of your favorite packages!
-
 # Install packages that have not been installed yet
 if ! zplug check --verbose; then
     printf "Install? [y/N]: "
@@ -48,34 +52,76 @@ if ! zplug check --verbose; then
         echo
     fi
 fi
-
 zplug load
 
 ########################
 # End of zplug loading #
 ########################
 
-# nvm
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+ZSH_CONFIG_DIR="$HOME/.config/zsh"
 
-# Load Alias zsh
 # I load it here to make sure that the aliases are loaded after the plugins
-[ -f "$HOME/.config/zsh/aliases.zsh" ] && source "$HOME/.config/zsh/aliases.zsh"
+[ -f "$ZSH_CONFIG_DIR/aliases.zsh" ] && source "$ZSH_CONFIG_DIR/aliases.zsh"
+[ -f "$ZSH_CONFIG_DIR/custom.zsh" ]  && source "$ZSH_CONFIG_DIR/custom.zsh"
 
-# Use the local zshrc file if it exists
-if [[ -f "$HOME/.zshrc.local" ]]; then
-    source "$HOME/.zshrc.local"
+if [[ -f "$HOME/.zshrc.local" ]]; then source "$HOME/.zshrc.local"; fi
+
+# zsh Options
+setopt HIST_IGNORE_ALL_DUPS
+setopt AUTO_CD
+
+# Starship
+export STARSHIP_CONFIG="$HOME/.config/starship.toml"
+eval "$(starship init zsh)"
+
+# Put Tmux session management after all PATH and other environment variables are set
+# Tmux Intelligent Session Management
+if command -v tmux >/dev/null 2>&1; then
+    # Check if the current environment is suitable for running tmux
+    if [[ -z "$TMUX" &&
+        $TERM != "screen-256color" &&
+        $TERM != "screen" &&
+        -z "$VSCODE_INJECTION" &&
+        -z "$INSIDE_EMACS" &&
+        -z "$EMACS" &&
+        -z "$VIM" &&
+        -z "$INTELLIJ_ENVIRONMENT_READER" ]]; then
+
+        # Check if tmux should be forcibly started
+        if [[ -n "$FORCE_TMUX" ]] || [[ -n "$SSH_CONNECTION" ]]; then
+            # Determine session name
+            if [[ -n "$TMUX_SESSION_NAME" ]]; then
+                SESSION_NAME="$TMUX_SESSION_NAME"
+            elif [[ -n "$SSH_CONNECTION" ]]; then
+                SESSION_NAME="default-$(whoami)"
+            else
+                SESSION_NAME="local-$(whoami)"
+            fi
+
+            # Try to attach to an existing session, or create a new one if it doesn't exist
+            if tmux has-session -t "$SESSION_NAME" 2>/dev/null; then
+                # Session exists, attempt to attach
+                tmux attach -t "$SESSION_NAME"
+            else
+                # Session does not exist, create a new session
+                tmux new-session -s "$SESSION_NAME"
+
+                # Set session timeout for automatic termination (if specified)
+                if [[ -n "$TMUX_IDLE_TIMEOUT" ]]; then
+                    tmux set-option -t "$SESSION_NAME" destroy-unattached on
+                    tmux set-option -t "$SESSION_NAME" destroy-unattached-timeout "$TMUX_IDLE_TIMEOUT"
+                fi
+            fi
+
+            # Check the exit behavior environment variable
+            if [[ "$TMUX_EXIT_BEHAVIOR" == "kill" ]]; then
+                # If set to "kill", terminate the session
+                tmux kill-session -t "$SESSION_NAME"
+            fi
+
+            # Exit the current shell
+            exit
+        fi
+        # If running in a local terminal and tmux is not forced, do nothing
+    fi
 fi
-
-PATH=~/.console-ninja/.bin:$PATH
-PATH="/Users/uke/perl5/bin${PATH:+:${PATH}}"; export PATH;
-PERL5LIB="/Users/uke/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
-PERL_LOCAL_LIB_ROOT="/Users/uke/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
-PERL_MB_OPT="--install_base \"/Users/uke/perl5\""; export PERL_MB_OPT;
-PERL_MM_OPT="INSTALL_BASE=/Users/uke/perl5"; export PERL_MM_OPT;
-
-export PATH='/Applications/Coq-Platform~8.20~2025.01.app/Contents/Resources/bin':"$PATH"
-export COQLIB="$(/Applications/Coq-Platform~8.20~2025.01.app/Contents/Resources/bin/coqc -where 2>/dev/null | tr -d '\r')"
-
-export codexKey88="88_427211af9c142371861a967c26f3bcf106c0cb4c8d47f782bdfda22cbb403fb7"
