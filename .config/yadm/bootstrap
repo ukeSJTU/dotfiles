@@ -18,6 +18,9 @@ check_font_installed() {
 # Install mise
 curl https://mise.run | sh
 
+echo "Installing global tools via Mise..."
+mise install
+
 # Install Homebrew Bundle
 if [ -f "$HOME/.Brewfile" ]; then
     brew bundle --global

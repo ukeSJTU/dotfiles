@@ -1,0 +1,18 @@
+[tools]
+python = ["3.12", "3.13", "3.10"]
+node ="lts"
+go = "latest"
+
+uv = "latest"
+pnpm = "latest"
+
+[env]
+NPM_CONFIG_REGISTRY = "https://registry.npmjs.org/"
+
+[settings]
+experimental = true
+verbose = false
+jobs = 4
+task_output = "prefix"
+color = true
+legacy_version_file = true
