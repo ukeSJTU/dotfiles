@@ -8,30 +8,30 @@ gui:
   enlargedSideViewLocation: "top"
   theme:
     activeBorderColor:
-      - "#b7bdf8"
+      - "#66d9ef"
       - bold
     inactiveBorderColor:
-      - "#5b6078"
+      - "#75715e"
     optionsTextColor:
-      - "#8aadf4"
+      - "#66d9ef"
     selectedLineBgColor:
-      - "#363a4f"
+      - "#49483e"
     cherryPickedCommitBgColor:
-      - "#494d64"
+      - "#3e3d32"
     cherryPickedCommitFgColor:
-      - "#b7bdf8"
+      - "#a6e22e"
     unstagedChangesColor:
-      - "#ed8796"
+      - "#f92672"
     defaultFgColor:
-      - "#cad3f5"
+      - "#f8f8f2"
     searchingActiveBorderColor:
-      - "#eed49f"
+      - "#e6db74"
   commitLength:
     show: true
   branchColors:
-    "release": "#eed49f"
-    "hotfix": "#ed8796"
-    "feature": "#a6da95"
+    "release": "#e6db74"
+    "hotfix": "#f92672"
+    "feature": "#a6e22e"
   showBottomLine: false # for hiding the bottom information line (unless it has important information to tell you)
   nerdFontsVersion: "3" # nerd fonts version to use ("2" or "3"); empty means don't show nerd font icons
   showNumstatInFilesView: true
