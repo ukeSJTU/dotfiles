@@ -9,4 +9,30 @@ else
 fi
 # We put the 'eval "$(starship init zsh)"' line in .zshrc and not here to avoid issues
 
+# Function to check if a font is installed
+check_font_installed() {
+    local font_name="$1"
+    fc-list | grep -qi "$font_name"
+}
+
+# Install Nerd Fonts
+echo ""
+echo "Checking Nerd Fonts..."
+
+# Fira Code Nerd Font
+if check_font_installed "FiraCode.*Nerd"; then
+    echo "✓ Fira Code Nerd Font already installed"
+else
+    echo "Installing Fira Code Nerd Font..."
+    brew install --cask font-fira-code-nerd-font
+fi
+
+# JetBrains Mono Nerd Font
+if check_font_installed "JetBrainsMono.*Nerd"; then
+    echo "✓ JetBrains Mono Nerd Font already installed"
+else
+    echo "Installing JetBrains Mono Nerd Font..."
+    brew install --cask font-jetbrains-mono-nerd-font
+fi
+
 echo "Bootstrap shell script executed!"
