@@ -3,6 +3,7 @@
 format = """
 $directory\
 $git_branch\
+$git_commit\
 $git_status\
 $fill\
 $python\
@@ -61,11 +62,11 @@ git_conflicted = "#F92672"
 
 [directory]
 style = 'bold cyan'
-format = '[$path]($style)[$read_only]($read_only_style)'
+format = '[$path]($style)[$read_only]($read_only_style) '
 truncation_length = 3
 truncation_symbol = '…/'
 truncate_to_repo = false
-read_only = "󰌾 "
+read_only = "󰌾"
 read_only_style = "red"
 
 [directory.substitutions]
@@ -88,6 +89,9 @@ symbol = ' '
 format = '[on](fg) [$symbol$branch ]($style)'
 
 [git_commit]
+style = "purple"
+only_detached = true
+tag_disabled = false
 tag_symbol = '  '
 
 [git_status]
