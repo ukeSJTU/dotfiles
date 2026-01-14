@@ -32,34 +32,11 @@ green = "#A6E22E"
 cyan = "#66D9EF"
 purple = "#AE81FF"
 
-# === Background and Foreground Colors ===
-bg = "#272822"
-bg_dark = "#1e1f1c"
-bg_selection = "#49483E"
-bg_line = "#3E3D32"
-bg_statusbar = "#414339"
-fg = "#F8F8F2"
-fg_cursor = "#F8F8F0"
-fg_comment = "#75715E"
-fg_line_number = "#90908A"
-fg_line_number_active = "#C2C2BF"
-fg_sidebar = "#C2C2BF"
-
 # === Additional Colors ===
 guide = "#464741"
 guide_active = "#767771"
 whitespace = "#464741"
 bracket = "#888888"
-
-# === Alias Colors ===
-comment = "#75715E"
-string = "#E6DB74"
-number = "#AE81FF"
-keyword = "#F92672"
-type = "#66D9EF"
-function = "#A6E22E"
-parameter = "#FD971F"
-variable = "#F8F8F2"
 
 # === Status Colors ===
 success = "#A6E22E"
@@ -116,6 +93,17 @@ tag_symbol = '  '
 [git_status]
 style = 'red'
 format = '([$all_status$ahead_behind]($style) )'
+conflicted = "[=](bold git_conflicted)"
+ahead = "[⇡](bold git_added)"
+behind = "[⇣](bold git_modified)"
+diverged = "[⇕](bold git_modified)"
+untracked = "[?](bold git_untracked)"
+stashed = '[\$](bold git_modified)'
+modified = "[!](bold git_modified)"
+staged = "[+](bold git_added)"
+renamed = "[»](bold git_renamed)"
+deleted = "[✘](bold git_deleted)"
+typechanged = "[](bold git_modified)"
 
 # === Language Specific Modules ===
 [aws]
