@@ -15,24 +15,12 @@ check_font_installed() {
     fc-list | grep -qi "$font_name"
 }
 
-# Install Nerd Fonts
-echo ""
-echo "Checking Nerd Fonts..."
+# Install mise
+curl https://mise.run | sh
 
-# Fira Code Nerd Font
-if check_font_installed "FiraCode.*Nerd"; then
-    echo "✓ Fira Code Nerd Font already installed"
-else
-    echo "Installing Fira Code Nerd Font..."
-    brew install --cask font-fira-code-nerd-font
-fi
-
-# JetBrains Mono Nerd Font
-if check_font_installed "JetBrainsMono.*Nerd"; then
-    echo "✓ JetBrains Mono Nerd Font already installed"
-else
-    echo "Installing JetBrains Mono Nerd Font..."
-    brew install --cask font-jetbrains-mono-nerd-font
+# Install Homebrew Bundle
+if [ -f "$HOME/.Brewfile" ]; then
+    brew bundle --global
 fi
 
 echo "Bootstrap shell script executed!"
