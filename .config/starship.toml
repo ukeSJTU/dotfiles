@@ -60,6 +60,15 @@ git_renamed = "#AE81FF"
 git_untracked = "#FD971F"
 git_conflicted = "#F92672"
 
+[character]
+format = "$symbol "
+success_symbol = "[❯](bold success)"
+error_symbol = "[❯](bold error)"
+vimcmd_symbol = "[❮](bold purple)"
+vimcmd_replace_one_symbol = "[❬](bold purple)"
+vimcmd_replace_symbol = "[❮](bold purple)"
+vimcmd_visual_symbol = "[❮](bold yellow)"
+
 [directory]
 style = 'bold cyan'
 format = '[$path]($style)[$read_only]($read_only_style) '
