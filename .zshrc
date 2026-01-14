@@ -5,19 +5,45 @@ if [[ -f "/opt/homebrew/bin/brew" ]]; then
     fi
 fi
 
+# ==========================================
+# 2. Manually set PATH and other environment variables
+# ==========================================
+# NOTE: we put PATH settings before mise so that mise can manage versions correctly
 
+# System / Local bins
+export PATH="/usr/local/bin:$HOME/bin:$HOME/.local/bin:$PATH"
+export PATH="$PATH:/opt/homebrew/opt/postgresql@15/bin"
 PATH=~/.console-ninja/.bin:$PATH
-PATH="/Users/uke/perl5/bin${PATH:+:${PATH}}"; export PATH;
-PERL5LIB="/Users/uke/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
-PERL_LOCAL_LIB_ROOT="/Users/uke/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
-PERL_MB_OPT="--install_base \"/Users/uke/perl5\""; export PERL_MB_OPT;
-PERL_MM_OPT="INSTALL_BASE=/Users/uke/perl5"; export PERL_MM_OPT;
 
+# WezTerm
+export PATH="$PATH:/Applications/WezTerm.app/Contents/MacOS"
+
+# Perl
+export PATH="/Users/uke/perl5/bin${PATH:+:${PATH}}"
+export PERL5LIB="/Users/uke/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"
+export PERL_LOCAL_LIB_ROOT="/Users/uke/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"
+export PERL_MB_OPT="--install_base \"/Users/uke/perl5\""
+export PERL_MM_OPT="INSTALL_BASE=/Users/uke/perl5"
+
+# Coq
 export PATH='/Applications/Coq-Platform~8.20~2025.01.app/Contents/Resources/bin':"$PATH"
 export COQLIB="$(/Applications/Coq-Platform~8.20~2025.01.app/Contents/Resources/bin/coqc -where 2>/dev/null | tr -d '\r')"
 
-# We put PATH modifications before loading mise and zplug
-# So mise can override PATH if needed
+# Flutter
+export PATH="/Users/uke/flutter/bin:$PATH"
+
+# PNPM
+export PNPM_HOME="$HOME/Library/pnpm"
+case ":$PATH:" in
+*":$PNPM_HOME:"*) ;;
+*) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+
+# Cargo (Rust)
+[ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
+
+# Envman
+[ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
 
 # Load mise, we use mise to manage node, python, rust, go etc.
 eval "$(mise activate zsh)"

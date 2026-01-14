@@ -30,37 +30,3 @@ else
 fi
 
 export VISUAL="nvim"
-
-# Add /usr/local/bin to the beginning of the PATH environment variable.
-# This ensures that executables in /usr/local/bin are found before other directories in the PATH.
-export PATH="/usr/local/bin:$HOME/bin:$HOME/.local/bin:$PATH"
-
-# Add Homebrew's sbin directory to the PATH environment variable.
-export PATH="$PATH:/opt/homebrew/opt/postgresql@15/bin"
-
-# wezterm
-export PATH="$PATH:/Applications/WezTerm.app/Contents/MacOS"
-
-# pnpm
-export PNPM_HOME="$HOME/Library/pnpm"
-case ":$PATH:" in
-*":$PNPM_HOME:"*) ;;
-*) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-
-# console-ninja
-export PATH="$PATH:~/.console-ninja/.bin"
-
-# envman
-# Generated for envman. Do not edit.
-[ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
-
-# pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PATH:$PYENV_ROOT/bin"
-# Check if pyenv is installed before initializing
-if which pyenv >/dev/null 2>&1; then
-    eval "$(pyenv init --path)"
-    eval "$(pyenv init -)"
-fi
-export PATH="/Users/uke/flutter/bin:$PATH"
