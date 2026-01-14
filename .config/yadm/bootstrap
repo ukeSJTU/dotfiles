@@ -1,1 +1,12 @@
+#!/bin/bash
+
+if command -v starship &> /dev/null; then
+    echo "Starship already installed ($(starship --version))"
+else
+    echo "Installing Starship..."
+    curl -sS https://starship.rs/install.sh | sh -s -- -y
+    echo "Starship installed!"
+fi
+# We put the 'eval "$(starship init zsh)"' line in .zshrc and not here to avoid issues
+
 echo "Bootstrap shell script executed!"
