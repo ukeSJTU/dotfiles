@@ -6,6 +6,10 @@ go = "latest"
 uv = "latest"
 pnpm = "latest"
 
+delta = "latest"
+lazygit = "latest"
+ripgrep = "latest"
+
 [env]
 NPM_CONFIG_REGISTRY = "https://registry.npmjs.org/"
 
