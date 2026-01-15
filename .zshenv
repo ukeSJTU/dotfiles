@@ -10,11 +10,10 @@ export XDG_DATA_HOME="$HOME/.local/share"  # Application data
 export XDG_STATE_HOME="$HOME/.local/state" # Logs and state files
 
 # Proxy settings for clash
-# export https_proxy=http://127.0.0.1:7890
-# export http_proxy=http://127.0.0.1:7890
-# export all_proxy=socks5://127.0.0.1:7890
-# export all_proxy=https://127.0.0.1:7890
-export https_proxy=http://127.0.0.1:7897 http_proxy=http://127.0.0.1:7897 all_proxy=socks5://127.0.0.1:7897
+export https_proxy=http://127.0.0.1:7897
+export http_proxy=http://127.0.0.1:7897
+export all_proxy=socks5://127.0.0.1:7897
+
 # Themes (onedark or nord)
 export TMUX_THEME="onedark"
 # export NVIM_THEME="nord"
