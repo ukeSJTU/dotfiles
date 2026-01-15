@@ -1,16 +1,45 @@
 [tools]
+# --- Programming Languages ---
 python = ["3.12", "3.13", "3.10"]
-node ="lts"
+node = "lts"
 go = "latest"
+zig = "latest"
+ruby = "latest"
+rust = "latest"
 
-uv = "latest"
-pnpm = "latest"
+# --- Package Managers ---
+uv = "latest"   # Python virtual environment manager
+pnpm = "latest" # Node.js package manager
+cargo-binstall = "latest" # Rust binary installer
 
-delta = "latest"
-lazygit = "latest"
-ripgrep = "latest"
+# --- Formats & Linters ---
+shfmt = "latest" # Shell script formatter
+biome = "latest" # Web toolchain (linter/formatter)
+ruff = "latest"  # Fast Python linter
 
-neovim = "latest"
+# --- Modern Tools ---
+"cargo:eza" = "latest" # Modern ls replacement with colors
+fd = "latest"          # Fast find alternative
+zoxide = "latest"      # Smarter cd command
+fzf = "latest"         # Fuzzy finder
+bat = "latest"         # Cat with syntax highlighting
+ripgrep = "latest"     # Fast grep alternative
+bottom = "latest"      # System monitor (top alternative)
+yazi = "latest"        # Terminal file manager
+jq = "latest"          # JSON processor
+yq = "latest"          # YAML/XML processor
+delta = "latest"       # Git diff viewer
+cowsay = "latest"      # Fun terminal tool
+"cargo:genact" = "latest"   # Nonsense activity generator
+
+# --- Dev Tools ---
+lazygit = "latest"     # Git TUI
+gh = "latest"          # GitHub CLI
+pre-commit = "latest"  # Git hooks framework
+cmake = "latest"       # Build system generator
+typst = "latest"       # Modern typesetting system
+tree-sitter = "latest" # Parser generator tool
+neovim = "latest"      # Hyperextensible Vim-based editor
 
 [env]
 NPM_CONFIG_REGISTRY = "https://registry.npmjs.org/"
@@ -22,3 +51,4 @@ jobs = 4
 task_output = "prefix"
 color = true
 legacy_version_file = true
+cargo.binstall = true
