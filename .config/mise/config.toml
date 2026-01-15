@@ -10,6 +10,8 @@ delta = "latest"
 lazygit = "latest"
 ripgrep = "latest"
 
+neovim = "latest"
+
 [env]
 NPM_CONFIG_REGISTRY = "https://registry.npmjs.org/"
 
