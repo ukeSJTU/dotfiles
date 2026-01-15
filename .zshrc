@@ -42,9 +42,6 @@ esac
 # Cargo (Rust)
 [ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
 
-# Envman
-[ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
-
 # Load mise, we use mise to manage node, python, rust, go etc.
 eval "$(mise activate zsh)"
 
