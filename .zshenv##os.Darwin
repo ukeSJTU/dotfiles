@@ -1,0 +1,31 @@
+[ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
+
+# Secrets
+[ -f "$HOME/.env" ] && source "$HOME/.env"
+
+# XDG Base directory specification
+export XDG_CONFIG_HOME="$HOME/.config"     # Config files
+export XDG_CACHE_HOME="$HOME/.cache"       # Cache files
+export XDG_DATA_HOME="$HOME/.local/share"  # Application data
+export XDG_STATE_HOME="$HOME/.local/state" # Logs and state files
+
+# Proxy settings for clash
+export https_proxy=http://127.0.0.1:7897
+export http_proxy=http://127.0.0.1:7897
+export all_proxy=socks5://127.0.0.1:7897
+
+# Themes (onedark or nord)
+export TMUX_THEME="onedark"
+# export NVIM_THEME="nord"
+export STARSHIP_THEME="monokai"
+# export WEZTERM_THEME="nord"
+
+# Use Neovim as default editor
+# Preferred editor for local and remote sessions
+if [[ -n $SSH_CONNECTION ]]; then
+    export EDITOR='vim'
+else
+    export EDITOR='nvim'
+fi
+
+export VISUAL="nvim"
