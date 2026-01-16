@@ -1,0 +1,88 @@
+# Windows-specific PATH and environment setup
+# Note: Adjust paths based on your Windows installation
+
+# Scoop (Windows package manager)
+if [[ -d "$HOME/scoop" ]]; then
+    export PATH="$HOME/scoop/shims:$PATH"
+fi
+
+# System / Local bins
+export PATH="/usr/local/bin:$HOME/bin:$HOME/.local/bin:$PATH"
+
+# Cargo (Rust)
+[ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
+
+# Load mise for version management
+if command -v mise &> /dev/null; then
+    eval "$(mise activate zsh)"
+fi
+
+####################################
+# Load zplug to manage zsh plugins #
+####################################
+# Check if zplug is installed
+if [[ ! -d ~/.zplug ]]; then
+    git clone https://github.com/zplug/zplug ~/.zplug
+    source ~/.zplug/init.zsh && zplug update --self
+fi
+
+# Essential
+source ~/.zplug/init.zsh
+
+# Make sure to use double quotes to prevent shell expansion
+zplug "zsh-users/zsh-syntax-highlighting"
+zplug "zsh-users/zsh-autosuggestions"
+zplug "plugins/git", from:oh-my-zsh
+zplug "plugins/alias-tips", from:oh-my-zsh
+zplug "plugins/common-aliases", from:oh-my-zsh
+zplug "Aloxaf/fzf-tab"
+
+# Install packages that have not been installed yet
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo
+        zplug install
+    else
+        echo
+    fi
+fi
+zplug load
+
+########################
+# End of zplug loading #
+########################
+
+ZSH_CONFIG_DIR="$HOME/.config/zsh"
+
+# Load custom configurations
+[ -f "$ZSH_CONFIG_DIR/aliases.zsh" ] && source "$ZSH_CONFIG_DIR/aliases.zsh"
+[ -f "$ZSH_CONFIG_DIR/custom.zsh" ]  && source "$ZSH_CONFIG_DIR/custom.zsh"
+
+# Load local overrides
+if [[ -f "$HOME/.zshrc.local" ]]; then source "$HOME/.zshrc.local"; fi
+
+# zsh Options
+setopt HIST_IGNORE_ALL_DUPS
+setopt AUTO_CD
+
+# Starship prompt
+export STARSHIP_CONFIG="$HOME/.config/starship.toml"
+if command -v starship &> /dev/null; then
+    eval "$(starship init zsh)"
+fi
+
+# Windows-specific: Disable tmux auto-start
+# Tmux on Windows works best in WSL
+# If using Git Bash, tmux may not work well
+# Uncomment and adjust if you want tmux on WSL/Windows
+
+# if command -v tmux >/dev/null 2>&1; then
+#     # Check if running in WSL
+#     if grep -qi microsoft /proc/version 2>/dev/null; then
+#         # WSL detected - tmux can work here
+#         if [[ -z "$TMUX" && -z "$VSCODE_INJECTION" ]]; then
+#             tmux attach || tmux new-session
+#         fi
+#     fi
+# fi

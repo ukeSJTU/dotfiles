@@ -1,0 +1,21 @@
+# .yadmrc - Yadm configuration file
+# This file configures yadm's behavior
+
+# Auto-process alternates after any yadm command that affects files
+# This ensures platform-specific files are always up-to-date
+# (This is usually automatic, but we make it explicit here)
+
+# Note: yadm processes alternates automatically on:
+# - yadm clone
+# - yadm pull
+# - yadm checkout
+# - yadm reset
+# - yadm merge
+
+# The yadm configuration is typically stored in ~/.config/yadm/config
+# and managed via: yadm config <key> <value>
+# This .yadmrc file is for documentation and can contain comments
+
+# Recommended yadm configuration commands to run:
+# yadm config local.class personal  # Set machine class (optional)
+# yadm gitconfig core.excludesFile ~/.gitignore_global

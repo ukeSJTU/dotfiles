@@ -1,0 +1,91 @@
+# Linux-specific PATH and environment setup
+
+# System / Local bins
+export PATH="/usr/local/bin:$HOME/bin:$HOME/.local/bin:$PATH"
+
+# Cargo (Rust)
+[ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
+
+# Load mise for version management
+if command -v mise &> /dev/null; then
+    eval "$(mise activate zsh)"
+fi
+
+####################################
+# Load zplug to manage zsh plugins #
+####################################
+# Check if zplug is installed
+if [[ ! -d ~/.zplug ]]; then
+    git clone https://github.com/zplug/zplug ~/.zplug
+    source ~/.zplug/init.zsh && zplug update --self
+fi
+
+# Essential
+source ~/.zplug/init.zsh
+
+# Make sure to use double quotes to prevent shell expansion
+zplug "zsh-users/zsh-syntax-highlighting"
+zplug "zsh-users/zsh-autosuggestions"
+zplug "plugins/git", from:oh-my-zsh
+zplug "plugins/alias-tips", from:oh-my-zsh
+zplug "plugins/common-aliases", from:oh-my-zsh
+zplug "Aloxaf/fzf-tab"
+
+# Install packages that have not been installed yet
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo
+        zplug install
+    else
+        echo
+    fi
+fi
+zplug load
+
+########################
+# End of zplug loading #
+########################
+
+ZSH_CONFIG_DIR="$HOME/.config/zsh"
+
+# Load custom configurations
+[ -f "$ZSH_CONFIG_DIR/aliases.zsh" ] && source "$ZSH_CONFIG_DIR/aliases.zsh"
+[ -f "$ZSH_CONFIG_DIR/custom.zsh" ]  && source "$ZSH_CONFIG_DIR/custom.zsh"
+
+# Load local overrides
+if [[ -f "$HOME/.zshrc.local" ]]; then source "$HOME/.zshrc.local"; fi
+
+# zsh Options
+setopt HIST_IGNORE_ALL_DUPS
+setopt AUTO_CD
+
+# Starship prompt
+export STARSHIP_CONFIG="$HOME/.config/starship.toml"
+if command -v starship &> /dev/null; then
+    eval "$(starship init zsh)"
+fi
+
+# Tmux session management (simplified for Linux)
+if command -v tmux >/dev/null 2>&1; then
+    if [[ -z "$TMUX" &&
+        $TERM != "screen-256color" &&
+        $TERM != "screen" &&
+        -z "$VSCODE_INJECTION" &&
+        -z "$INSIDE_EMACS" &&
+        -z "$EMACS" &&
+        -z "$VIM" &&
+        -z "$INTELLIJ_ENVIRONMENT_READER" ]]; then
+
+        # Auto-start tmux on SSH connections
+        if [[ -n "$SSH_CONNECTION" ]] || [[ -n "$FORCE_TMUX" ]]; then
+            SESSION_NAME="default-$(whoami)"
+            
+            if tmux has-session -t "$SESSION_NAME" 2>/dev/null; then
+                tmux attach -t "$SESSION_NAME"
+            else
+                tmux new-session -s "$SESSION_NAME"
+            fi
+        fi
+    fi
+fi

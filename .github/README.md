@@ -1,9 +1,48 @@
 # Dotfiles
 
 This repository contains configurations for my personal development environment, managed by **Yadm**.
-It targets **macOS** (primary) and **Linux** systems, aiming for a portable and reproducible setup.
+It targets **macOS** (primary), **Linux**, and **Windows** systems, aiming for a portable and reproducible setup.
+
+## Platform Support
+
+- **macOS**: Full support with Homebrew for package management
+- **Linux**: Full support with distribution-specific package managers
+- **Windows**: Support via Git Bash/WSL with Scoop for package management
 
 ## Installation
+
+### Prerequisites
+
+**macOS/Linux:**
+```bash
+# Install yadm
+# macOS:
+brew install yadm
+
+# Linux (Debian/Ubuntu):
+sudo apt install yadm
+
+# Linux (Arch):
+sudo pacman -S yadm
+
+# Or use the standalone installer:
+curl -fLo ~/bin/yadm https://github.com/TheLocehiliosan/yadm/raw/master/yadm && chmod a+x ~/bin/yadm
+```
+
+**Windows:**
+```powershell
+# Install Git for Windows (includes Git Bash)
+winget install Git.Git
+
+# Install Scoop (package manager)
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+irm get.scoop.sh | iex
+
+# Install yadm
+scoop install yadm
+```
+
+### Clone Repository
 
 On a new machine, simply run:
 
@@ -19,6 +58,13 @@ If you want to bootstrap the system (install dependencies, setup tools, etc.), r
 yadm bootstrap
 ```
 
+The bootstrap script will:
+- Detect your operating system automatically
+- Install Starship (cross-shell prompt)
+- Install mise (version manager for languages and tools)
+- Install platform-specific packages (Homebrew on macOS, Scoop on Windows)
+- Set up all development tools from `~/.config/mise/config.toml`
+
 ## Core Tools
 
 ### Yadm
@@ -27,12 +73,19 @@ yadm bootstrap
 **Configuration**: The repository itself (`.git/` inside `$HOME`).
 **Bootstrap**: `~/.config/yadm/bootstrap` (Handles initial setup & installation).
 
+**Cross-Platform Support**:
+Yadm uses "alternates" to manage platform-specific configurations. Files with special suffixes are automatically symlinked based on your OS:
+- `.zshrc##os.Darwin` → Used on macOS
+- `.zshrc##os.Linux` → Used on Linux
+- `.zshrc##os.Windows_NT` → Used on Windows (Git Bash/WSL)
+
 **Common Commands**:
 
 * `yadm status`: Check status of dotfiles.
 * `yadm add <file>`: Track a new config file.
 * `yadm commit -m "..."`: Save changes.
 * `yadm push`: Upload to remote.
+* `yadm alt`: Update alternate files (usually automatic).
 
 ### Mise (mise-en-place)
 
@@ -53,7 +106,7 @@ yadm bootstrap
 
 *(Note: If installed via Homebrew, use `brew upgrade mise`)*
 
-### Homebrew
+### Homebrew (macOS only)
 
 **Description**: The package manager for macOS system-level dependencies, GUI apps (Casks), and heavy tools not suitable for Mise.
 **Configuration**: `~/.Brewfile` (List of installed packages).
@@ -63,6 +116,33 @@ yadm bootstrap
 * **Install Dependencies**: `brew bundle --global` (Install everything in Brewfile).
 * **Snapshot Current Setup**: `brew bundle dump --global --force --describe` (Update Brewfile with currently installed packages).
 * **Cleanup**: `brew cleanup`.
+
+### Scoop (Windows only)
+
+**Description**: Command-line installer for Windows. Similar to Homebrew but for Windows.
+**Configuration**: `~/.Scoopfile` (List of packages to install).
+**Website**: https://scoop.sh/
+
+**Installation**:
+```powershell
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+irm get.scoop.sh | iex
+```
+
+**Common Commands**:
+
+* **Install a package**: `scoop install <package>`
+* **Update Scoop**: `scoop update`
+* **Update all packages**: `scoop update *`
+* **Search for packages**: `scoop search <query>`
+* **Add buckets**: `scoop bucket add extras` (for more packages)
+* **Cleanup old versions**: `scoop cleanup *`
+
+**Recommended Buckets**:
+* `extras` - Additional useful apps
+* `nerd-fonts` - Programming fonts with icons
+
+**Alternative**: Windows also supports `winget` (built-in) and `chocolatey` as package managers.
 
 ---
 
@@ -122,3 +202,80 @@ yadm bootstrap
 **Common Commands**:
 
 * `lg`: Alias to open lazygit.
+
+---
+
+## Platform-Specific Notes
+
+### macOS
+
+- **Homebrew**: Primary package manager for system tools and GUI apps
+- **Shell**: zsh is the default shell (since macOS Catalina)
+- **Paths**: Uses `/opt/homebrew` on Apple Silicon, `/usr/local` on Intel
+- **Terminal**: iTerm2, WezTerm, or default Terminal.app recommended
+- **Tmux**: Full support with auto-start on SSH
+
+### Linux
+
+- **Package Managers**: Distribution-specific (apt, dnf, pacman, etc.)
+- **Shell**: Install zsh if not default: `sudo apt install zsh` or equivalent
+- **Paths**: Standard Unix paths (`/usr/local/bin`, `/usr/bin`, etc.)
+- **Terminal**: Most terminal emulators work (GNOME Terminal, Konsole, etc.)
+- **Tmux**: Full support
+
+### Windows
+
+- **Environment**: Best with Git Bash (included with Git for Windows) or WSL
+- **Package Manager**: Scoop (recommended) or winget
+- **Shell**: 
+  - **Git Bash**: Provides Unix-like environment on Windows
+  - **WSL**: Full Linux environment (Ubuntu, Debian, etc.) - recommended for serious development
+- **Paths**: Mixed Windows/Unix paths can be tricky
+- **Terminal**: Windows Terminal (recommended) or Git Bash
+- **Tmux**: 
+  - Not available in Git Bash
+  - Full support in WSL
+- **Notes**:
+  - Some Unix tools may not work in Git Bash
+  - For best experience, use WSL 2 with these dotfiles
+  - Git Credential Manager recommended for git authentication
+
+### Choosing Between Git Bash and WSL on Windows
+
+**Git Bash** (lighter, faster):
+- Quick terminal access
+- Good for basic git operations and shell commands
+- Many Unix tools work via Git for Windows
+- No tmux support
+
+**WSL** (full Linux experience):
+- Complete Linux environment
+- All Unix tools work natively
+- Full tmux support
+- Better for serious development
+- Requires Windows 10/11
+
+## Troubleshooting
+
+### Yadm alternates not working
+
+Run `yadm alt` to manually trigger alternate file processing.
+
+### Bootstrap fails on Windows
+
+Make sure you're running Git Bash or WSL, not Command Prompt or PowerShell.
+
+### mise commands not found after install
+
+Restart your shell or run: `source ~/.zshrc` (Unix) or restart Git Bash (Windows).
+
+### Scoop installation issues on Windows
+
+You may need to change execution policy first:
+```powershell
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+## Contributing
+
+Feel free to fork this repository and customize it for your own use! The cross-platform structure makes it easy to maintain separate configurations while sharing common tools.
