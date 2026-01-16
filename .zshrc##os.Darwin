@@ -19,18 +19,18 @@ PATH=~/.console-ninja/.bin:$PATH
 export PATH="$PATH:/Applications/WezTerm.app/Contents/MacOS"
 
 # Perl
-export PATH="/Users/uke/perl5/bin${PATH:+:${PATH}}"
-export PERL5LIB="/Users/uke/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"
-export PERL_LOCAL_LIB_ROOT="/Users/uke/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"
-export PERL_MB_OPT="--install_base \"/Users/uke/perl5\""
-export PERL_MM_OPT="INSTALL_BASE=/Users/uke/perl5"
+export PATH="$HOME/perl5/bin${PATH:+:${PATH}}"
+export PERL5LIB="$HOME/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"
+export PERL_LOCAL_LIB_ROOT="$HOME/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"
+export PERL_MB_OPT="--install_base \"$HOME/perl5\""
+export PERL_MM_OPT="INSTALL_BASE=$HOME/perl5"
 
 # Coq
 export PATH='/Applications/Coq-Platform~8.20~2025.01.app/Contents/Resources/bin':"$PATH"
 export COQLIB="$(/Applications/Coq-Platform~8.20~2025.01.app/Contents/Resources/bin/coqc -where 2>/dev/null | tr -d '\r')"
 
 # Flutter
-export PATH="/Users/uke/flutter/bin:$PATH"
+export PATH="$HOME/flutter/bin:$PATH"
 
 # PNPM
 export PNPM_HOME="$HOME/Library/pnpm"
@@ -43,7 +43,9 @@ esac
 [ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
 
 # Load mise, we use mise to manage node, python, rust, go etc.
-eval "$(mise activate zsh)"
+if command -v mise &> /dev/null; then
+    eval "$(mise activate zsh)"
+fi
 
 ####################################
 # Load zplug to manage zsh plugins #

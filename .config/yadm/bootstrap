@@ -110,10 +110,11 @@ case "$OS" in
             if [ -f "$HOME/.Scoopfile" ]; then
                 echo "==> Installing from Scoopfile..."
                 while IFS= read -r package; do
-                    # Skip comments and empty lines
-                    [[ "$package" =~ ^#.*$ ]] || [[ -z "$package" ]] && continue
-                    echo "Installing: $package"
-                    scoop install "$package" || true
+                    # Skip comments (with or without leading spaces) and empty/whitespace-only lines
+                    package_trimmed=$(echo "$package" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+                    [[ "$package_trimmed" =~ ^#.*$ ]] || [[ -z "$package_trimmed" ]] && continue
+                    echo "Installing: $package_trimmed"
+                    scoop install "$package_trimmed" || true
                 done < "$HOME/.Scoopfile"
             fi
         fi
