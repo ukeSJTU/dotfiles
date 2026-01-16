@@ -29,6 +29,8 @@ brew "git"
 brew "imagemagick"
 # Image manipulation library
 brew "jpeg"
+# Handy way to save and run project-specific commands
+brew "just"
 # Next-gen compiler infrastructure
 brew "llvm"
 # Package manager for the Lua programming language
