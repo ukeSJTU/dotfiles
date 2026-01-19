@@ -40,6 +40,7 @@ cmake = "latest"       # Build system generator
 typst = "latest"       # Modern typesetting system
 tree-sitter = "latest" # Parser generator tool
 neovim = "latest"      # Hyperextensible Vim-based editor
+claude = "2.1.12"      # Claude Code
 
 [env]
 NPM_CONFIG_REGISTRY = "https://registry.npmjs.org/"
