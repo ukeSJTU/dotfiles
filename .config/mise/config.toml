@@ -32,6 +32,7 @@ delta = "latest"       # Git diff viewer
 cowsay = "latest"      # Fun terminal tool
 "cargo:genact" = "latest"   # Nonsense activity generator
 starship = "latest"    # Prompt modifier
+devcontainer-cli="latest" # devcontainer
 
 # --- Dev Tools ---
 lazygit = "latest"     # Git TUI
