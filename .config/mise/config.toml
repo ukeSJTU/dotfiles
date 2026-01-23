@@ -43,6 +43,7 @@ typst = "latest"       # Modern typesetting system
 tree-sitter = "latest" # Parser generator tool
 neovim = "latest"      # Hyperextensible Vim-based editor
 claude = "2.1.12"      # Claude Code
+codex = "latest"       # Codex
 just = "latest"        # Just a Command Runner
 
 [env]
