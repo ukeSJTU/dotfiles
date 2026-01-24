@@ -1,26 +1,19 @@
 [init]
-	defaultBranch = main
-[user]
-	name = ukeSJTU
-	email = uke_sjtu@sjtu.edu.cn
-[pager]
-	branch = false
-	log = false
-[credential]
-	helper = 
-	helper = /usr/local/share/gcm-core/git-credential-manager
-[credential "https://dev.azure.com"]
-	useHttpPath = true
-[credential "https://huggingface.co"]
-	provider = generic
+    defaultBranch = main
 
-[credential "https://github.com"]
-	ukeSJTU = ukeSJTU
-	username = ukeSJTU
+[user]
+    name = ukeSJTU
+    email = uke_sjtu@sjtu.edu.cn
+
 [core]
-	quotepath = false
-	pager = delta
-	excludesfile = ~/.gitignore_global
+    quotepath = false
+    excludesfile = ~/.gitignore_global
+
+[pager]
+    branch = false
+    log = false
+	diff = delta
+    show = delta
 
 [interactive]
     diffFilter = delta --color-only
@@ -30,18 +23,53 @@
     light = false
     side-by-side = true
     line-numbers = true
-    syntax-theme = Monokai Extended 
-
-[merge]
-    conflictstyle = diff3
+    syntax-theme = Monokai Extended
 
 [diff]
-	tool = vscode
+    tool = vscode
+    algorithm = histogram
+    colorMoved = default
+
 [difftool "vscode"]
-	cmd = code --wait --diff $LOCAL $REMOTE
+    cmd = code --wait --diff $LOCAL $REMOTE
+
+[merge]
+    tool = vscode
+    conflictstyle = zdiff3
+
+[mergetool "vscode"]
+    cmd = code --wait --merge $REMOTE $LOCAL $BASE $MERGED
+
+[rebase]
+    autoSquash = true
+    updateRefs = true
+
+[push]
+    default = current
+    autoSetupRemote = true
+    followTags = true
+
+[submodule]
+    recurse = true
+
+[status]
+    submoduleSummary = true
 
 [filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
+
+[url "git@github.com:"]
+    insteadOf = https://github.com/
+
+[credential "https://dev.azure.com"]
+    useHttpPath = true
+
+[credential "https://huggingface.co"]
+    provider = generic
+
+# Platform specific settings can be set in ~/.gitconfig.local and will not be synced
+[include]
+    path = ~/.gitconfig.local
