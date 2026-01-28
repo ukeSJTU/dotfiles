@@ -1,0 +1,46 @@
+[init]
+	defaultBranch = main
+[user]
+	name = ukeSJTU
+	email = uke_sjtu@sjtu.edu.cn
+[pager]
+	branch = false
+	log = false
+[credential]
+	helper = cache --timeout=3600
+[credential "https://dev.azure.com"]
+	useHttpPath = true
+[credential "https://huggingface.co"]
+	provider = generic
+
+[credential "https://github.com"]
+	ukeSJTU = ukeSJTU
+	username = ukeSJTU
+[core]
+	quotepath = false
+	pager = delta
+	excludesfile = ~/.gitignore_global
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true
+    light = false
+    side-by-side = true
+    line-numbers = true
+    syntax-theme = Monokai Extended 
+
+[merge]
+    conflictstyle = diff3
+
+[diff]
+	tool = vscode
+[difftool "vscode"]
+	cmd = code --wait --diff $LOCAL $REMOTE
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true

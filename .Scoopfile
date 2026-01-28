@@ -1,0 +1,83 @@
+# Scoopfile for Windows package management
+# Install Scoop: https://scoop.sh/
+# Usage: while IFS= read -r pkg; do [[ "$pkg" =~ ^#.*$ ]] || [[ -z "$pkg" ]] && continue; scoop install "$pkg"; done < .Scoopfile
+
+# === Core Development Tools ===
+git
+7zip
+curl
+wget
+which
+
+# === Programming Languages & Runtimes ===
+# Note: mise manages most language versions (node, python, rust, go, etc.)
+# Only install system-level dependencies here
+
+# === Terminal & Shell ===
+# Windows Terminal is recommended (install from Microsoft Store)
+# For zsh on Windows, use Git Bash or WSL
+
+# === Fonts ===
+# Add nerd-fonts bucket first: scoop bucket add nerd-fonts
+FiraCode-NF
+JetBrainsMono-NF
+
+# === Development Tools ===
+# mise - version manager (replaces asdf, nvm, pyenv, etc.)
+mise
+
+# starship - cross-shell prompt
+starship
+
+# Git tools
+lazygit
+gh
+delta
+
+# === Modern CLI Utilities ===
+# Most are installed via mise, but core system tools here
+ripgrep
+fd
+fzf
+bat
+eza
+zoxide
+jq
+yq
+
+# === Compression & Archive Tools ===
+# 7zip already included above
+
+# === Text Editors ===
+neovim
+
+# === System Utilities ===
+bottom
+tldr
+
+# === Media Tools ===
+ffmpeg
+imagemagick
+
+# === Optional Tools ===
+# Uncomment as needed
+
+# === Build Tools ===
+cmake
+# llvm
+# make
+
+# === Database Tools (optional) ===
+# mysql
+# postgresql
+
+# === Network Tools ===
+# aria2
+# socat
+# websocat
+
+# === Note ===
+# For GUI applications, consider:
+# - Windows Terminal (Microsoft Store)
+# - VSCode: scoop install vscode
+# - Git Credential Manager: scoop install git-credential-manager
