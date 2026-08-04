@@ -131,19 +131,20 @@ bindkey '^[[1;5D' backward-word
 alias c='clear'
 
 # eza: a nicer `ls` — colored, git status per file, directories grouped
-# first. Icons rely on the Nerd Font already used by starship.
+# first. No icons, kept plain.
 if (( $+commands[eza] )); then
-  alias ls='eza --group-directories-first --icons'
-  alias ll='eza -l --group-directories-first --icons --git'
-  alias la='eza -la --group-directories-first --icons --git'
-  alias lt='eza --tree --level=2 --group-directories-first --icons'
+  alias ls='eza --group-directories-first --git'
+  alias ll='eza -l --group-directories-first --git'
+  alias la='eza -la --group-directories-first --git'
+  alias lt='eza --tree --level=2 --group-directories-first --git'
 fi
 
-# bat: a nicer `cat` — syntax highlighting and git-diff markers in the
-# gutter. Auto-disables styling when output isn't a terminal, so it's safe
-# as a drop-in replacement even when piped.
+# bat: syntax-highlighted `cat`, kept as a separate `bcat` rather than
+# overriding `cat` itself. --theme=ansi reuses the terminal's own color
+# scheme instead of a fixed bat theme, so it matches whatever WezTerm theme
+# is active.
 if (( $+commands[bat] )); then
-  alias cat='bat --paging=never'
+  alias bcat='bat --theme=ansi'
 fi
 
 # tealdeer: example-first man pages (community-maintained cheatsheets).
