@@ -18,6 +18,15 @@ mkdir -p "$ZSH_CACHE_DIR"
 autoload -Uz compinit
 compinit -d "$ZSH_CACHE_DIR/zcompdump-$ZSH_VERSION"
 
+# Completion styling: case-insensitive-ish matching, colored listings, grouped
+# output, and disk caching for slow completions (e.g. git, brew).
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+zstyle ':completion:*' list-colors 'di=34:ln=35:so=32:pi=33:ex=31:bd=33:cd=33'
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*:descriptions' format '[%d]'
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path "$ZSH_CACHE_DIR"
+
 # fzf-tab must load after compinit, but before plugins that wrap widgets
 # (zsh-autosuggestions, zsh-syntax-highlighting, both sourced below).
 if [[ -r "$HOMEBREW_PREFIX/share/fzf-tab/fzf-tab.zsh" ]]; then
@@ -57,13 +66,18 @@ setopt EXTENDED_HISTORY
 setopt APPEND_HISTORY
 setopt INC_APPEND_HISTORY
 setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_EXPIRE_DUPS_FIRST
 setopt HIST_FIND_NO_DUPS
 setopt HIST_REDUCE_BLANKS
 setopt HIST_VERIFY
+setopt HIST_IGNORE_SPACE
 
 # Small interactive conveniences.
 setopt AUTO_CD
 setopt INTERACTIVE_COMMENTS
+setopt EXTENDED_GLOB
+setopt NO_CASE_GLOB
+setopt NO_BEEP
 
 if [[ -r "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
   source "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
@@ -79,6 +93,20 @@ if [[ -r "$HOMEBREW_PREFIX/share/zsh-history-substring-search/zsh-history-substr
   bindkey "$terminfo[kcuu1]" history-substring-search-up
   bindkey "$terminfo[kcud1]" history-substring-search-down
 fi
+
+# Explicit emacs keymap (already zsh's default, but pinned so a stray
+# $EDITOR=vi elsewhere on the machine can't silently flip this — vi-mode
+# itself is intentionally not configured for now).
+bindkey -e
+
+# Extra navigation keys beyond the emacs-mode defaults (Alt+B/F/D/Backspace
+# for word movement already work out of the box).
+[[ -n "$terminfo[khome]" ]] && bindkey "$terminfo[khome]" beginning-of-line
+[[ -n "$terminfo[kend]" ]] && bindkey "$terminfo[kend]" end-of-line
+[[ -n "$terminfo[kdch1]" ]] && bindkey "$terminfo[kdch1]" delete-char
+# Ctrl+Left / Ctrl+Right to jump by word (xterm-style sequences; WezTerm sends these).
+bindkey '^[[1;5C' forward-word
+bindkey '^[[1;5D' backward-word
 
 # Reminds you when a command you just typed has a shorter existing alias.
 if [[ -r "$HOMEBREW_PREFIX/share/zsh-you-should-use/you-should-use.plugin.zsh" ]]; then
