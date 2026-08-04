@@ -60,12 +60,41 @@ plus their own yadm worktree at their own `$HOME`, all tracking the same
 `origin`. Treat `origin/main` as the source of truth; local drift in any
 single `$HOME` is expected to be temporary.
 
+## Bootstrapping a new machine
+
+Two scripts under `.config/yadm/` take a fresh Mac to a fully deployed state,
+split at the point where `yadm clone` becomes possible (it needs `git`,
+`yadm`, and working SSH auth to `github.com`, none of which exist yet on a
+brand-new machine):
+
+1. **`.config/yadm/preflight.sh`** — not deployed/tracked in any meaningful
+   sense (it only ever runs once, before yadm exists on the machine); run it
+   via:
+   ```
+   curl -fsSL https://raw.githubusercontent.com/ukeSJTU/dotfiles/main/.config/yadm/preflight.sh | bash
+   ```
+   It installs Xcode CLT and Homebrew, installs `git`/`gh`/`yadm`,
+   authenticates `gh`, generates and registers a GitHub SSH key, then runs
+   `yadm clone` itself — which auto-chains into step 2.
+2. **`.config/yadm/bootstrap`** — yadm's native bootstrap hook, runs
+   automatically right after `yadm clone` (also re-runnable later via
+   `yadm bootstrap`, e.g. after adding new `Brewfile` entries). Runs
+   `brew bundle`, `git lfs install`, a `compaudit`-based fix for zsh's
+   insecure-completion-directory warning, and `mise lock --global && mise
+   install --locked`.
+
+Before running `preflight.sh`, a few things are still deliberately manual —
+GUI installers and an interactive login aren't worth scripting: install
+Clash Verge Rev (AirDrop or otherwise) and turn on its System Proxy mode if
+the network needs it, and install/sign into Chrome. `preflight.sh` assumes
+that's already done.
+
 ## Working in this repo
 
 - New packages/casks go in `.homebrew/Brewfile`, installed elsewhere via
   `brew bundle`.
-- There's no bootstrap script and no yadm encryption (`yadm encrypt`) in use
-  yet — if either gets added, document the steps here.
+- No yadm encryption (`yadm encrypt`) in use yet — if that gets added,
+  document the steps here.
 - Since changes here don't take effect until pushed and pulled by yadm on a
   real `$HOME`, don't run `yadm pull`, `yadm decrypt`, or anything else that
   mutates a live `$HOME` from within this repo's context — that's a

@@ -1,0 +1,36 @@
+#!/bin/bash
+# Phase 2 of this dotfiles repo's bootstrap. yadm runs this automatically
+# right after `yadm clone` (see .config/yadm/preflight.sh for phase 1, which
+# gets a fresh Mac to the point where the clone can happen at all). Also
+# runnable standalone later via `yadm bootstrap` — e.g. after adding new
+# entries to .homebrew/Brewfile.
+set -euo pipefail
+
+if [[ -x /opt/homebrew/bin/brew ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [[ -x /usr/local/bin/brew ]]; then
+  eval "$(/usr/local/bin/brew shellenv)"
+fi
+
+echo "==> brew bundle (installs everything declared in .homebrew/Brewfile)..."
+brew bundle --file="$HOME/.homebrew/Brewfile"
+
+echo "==> git lfs install..."
+git lfs install
+
+echo "==> Fixing any insecure zsh completion directories flagged by compaudit..."
+zsh -c 'compaudit' 2>/dev/null | while IFS= read -r dir; do
+  chmod g-w,o-w "$dir"
+done
+
+echo "==> mise: locking and installing pinned tool versions..."
+mise lock --global
+mise install --locked
+
+cat <<'EOF'
+
+==> Bootstrap complete. Still manual, on purpose:
+  - Confirm Chrome is set as the default browser and signed in.
+  - Open VS Code once if any extension didn't install cleanly.
+  - Sign into OrbStack/Docker if you need containers.
+EOF
