@@ -23,6 +23,7 @@ brew "shfmt"
 brew "actionlint"
 
 brew "lazygit"
+brew "git-delta"
 brew "starship"
 brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"

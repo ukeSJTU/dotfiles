@@ -4,6 +4,8 @@
 	prune = true
 [push]
 	autoSetupRemote = true
+[pull]
+	rebase = true
 [rerere]
 	enabled = true
 [user]
@@ -11,3 +13,24 @@
 	name = ukeSJTU
 [merge]
 	conflictStyle = zdiff3
+[diff]
+	algorithm = histogram
+	colorMoved = default
+[column]
+	ui = auto
+[help]
+	autocorrect = prompt
+[branch]
+	sort = -committerdate
+[tag]
+	sort = version:refname
+[commit]
+	verbose = true
+[core]
+	pager = delta
+[interactive]
+	diffFilter = delta --color-only
+[delta]
+	navigate = true
+	line-numbers = true
+	side-by-side = false
