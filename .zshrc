@@ -54,6 +54,12 @@ if (( $+commands[starship] )); then
   eval "$(starship init zsh)"
 fi
 
+# direnv must be hooked last so its PATH/env mutations aren't clobbered by
+# later tool inits.
+if (( $+commands[direnv] )); then
+  eval "$(direnv hook zsh)"
+fi
+
 # Persistent history.
 ZSH_STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/zsh"
 mkdir -p "$ZSH_STATE_DIR"
