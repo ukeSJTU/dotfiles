@@ -31,6 +31,8 @@ function M.apply(wezterm, config)
   config.font_size = 13.5
   config.line_height = 1.04
   config.cell_width = 1.0
+  -- Disable contextual alternates/ligatures so programming symbols (->, ==, etc.)
+  -- render as their literal characters instead of being merged into glyphs.
   config.harfbuzz_features = { 'calt=0', 'clig=0', 'liga=0' }
 
   -- Color and window appearance.
@@ -103,6 +105,9 @@ function M.apply(wezterm, config)
   --   split = '#aaa99f',
   -- }
 
+  -- Catppuccin Mocha palette, hand-picked to match config.color_scheme above.
+  -- Returned to the caller (see wezterm.lua) so ui.setup can reuse these same
+  -- colors when drawing tab titles and the status bar.
   local titlebar = {
     background = '#181825',
     active_bg = '#313244',
@@ -120,6 +125,7 @@ function M.apply(wezterm, config)
     split = '#585b70',
   }
 
+  -- Wire the titlebar palette above into WezTerm's actual tab-bar color config.
   config.colors = {
     split = titlebar.split,
     tab_bar = {

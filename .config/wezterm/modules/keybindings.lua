@@ -1,6 +1,9 @@
 local M = {}
 
 function M.apply(config, act)
+  -- tmux-style leader key: press Ctrl-A, release, then press the bound key
+  -- within 1s. Almost every binding below is expressed as `LEADER` + a key
+  -- rather than a raw modifier combo, to avoid clashing with app/shell shortcuts.
   config.leader = {
     key = 'a',
     mods = 'CTRL',
@@ -70,6 +73,7 @@ function M.apply(config, act)
     { key = 'R', mods = 'LEADER|SHIFT', action = act.ReloadConfiguration },
   }
 
+  -- LEADER+1..9 jumps directly to tab index 0..8 (ActivateTab is 0-indexed).
   for index = 1, 9 do
     table.insert(config.keys, {
       key = tostring(index),
@@ -78,6 +82,9 @@ function M.apply(config, act)
     })
   end
 
+  -- Modal key table: after LEADER+r, plain h/j/k/l (or arrow keys) resize the
+  -- current pane repeatedly without needing to re-press LEADER each time,
+  -- until Escape/Enter (or the 5s timeout above) pops back to normal mode.
   config.key_tables = {
     resize_pane = {
       { key = 'h', action = act.AdjustPaneSize { 'Left', 2 } },

@@ -1,3 +1,5 @@
+# mise: per-project runtime version manager (node, python, go, rust, ...).
+# Must run first so its shims are on PATH before anything below relies on them.
 eval "$(mise activate zsh)"
 
 # Homebrew-provided Zsh completions.
@@ -35,7 +37,9 @@ if [[ -r "$HOMEBREW_PREFIX/share/fzf-tab/fzf-tab.zsh" ]]; then
   source "$HOMEBREW_PREFIX/share/fzf-tab/fzf-tab.zsh"
 fi
 
-# fzf
+# fzf: fuzzy finder. These env vars point its built-in keybindings
+# (Ctrl-T = insert file, Alt-C = cd into dir) at fd for faster, .gitignore-aware
+# searching, and add a bat-rendered preview pane for Ctrl-T.
 if (( $+commands[fzf] )); then
   export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
@@ -50,6 +54,8 @@ if (( $+commands[zoxide] )); then
   eval "$(zoxide init zsh)"
 fi
 
+# starship: cross-shell prompt renderer; theme/modules live in
+# .config/starship.toml.
 if (( $+commands[starship] )); then
   eval "$(starship init zsh)"
 fi
@@ -68,6 +74,10 @@ HISTFILE="$ZSH_STATE_DIR/history"
 HISTSIZE=100000
 SAVEHIST=50000
 
+# History write/dedup behavior: write timestamps, share history across
+# concurrent sessions immediately (INC_APPEND_HISTORY), drop duplicates
+# (keeping the newest), and let a space-prefixed command skip history
+# entirely (HIST_IGNORE_SPACE) — handy for one-off commands with secrets.
 setopt EXTENDED_HISTORY
 setopt APPEND_HISTORY
 setopt INC_APPEND_HISTORY
@@ -78,7 +88,10 @@ setopt HIST_REDUCE_BLANKS
 setopt HIST_VERIFY
 setopt HIST_IGNORE_SPACE
 
-# Small interactive conveniences.
+# Small interactive conveniences: type a bare dir name to cd into it
+# (AUTO_CD), allow # comments when typing interactively, enable advanced
+# glob operators like ^ and # (EXTENDED_GLOB), match globs case-insensitively
+# (NO_CASE_GLOB — interactive only, doesn't affect scripts), and stay quiet.
 setopt AUTO_CD
 setopt INTERACTIVE_COMMENTS
 setopt EXTENDED_GLOB

@@ -21,7 +21,10 @@ function M.apply(config, act)
     target = 'CursorColor',
   }
 
+  -- Pick up config file edits without restarting WezTerm.
   config.automatically_reload_config = true
+  -- Characters that end a double-click word selection, so paths/brackets/quotes
+  -- don't get swallowed into the selected word.
   config.selection_word_boundary = ' \t\n{}[]()"\'`,;:'
 
   -- Keep regular clicks focused on selection and require Command-click to open

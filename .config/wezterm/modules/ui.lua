@@ -1,5 +1,7 @@
 local M = {}
 
+-- Prefer a manually-set tab title (via ActivateTab/right-click "Rename Tab")
+-- over the running program's title.
 local function tab_title(tab)
   if tab.tab_title and #tab.tab_title > 0 then
     return tab.tab_title
@@ -8,6 +10,9 @@ local function tab_title(tab)
 end
 
 function M.setup(wezterm, titlebar)
+  -- WezTerm calls this to render each tab's label in the tab bar. Returning a
+  -- list of formatting "cells" (background/foreground/text runs) lets us draw
+  -- a colored accent marker + index + title instead of the plain default text.
   wezterm.on('format-tab-title', function(tab, _tabs, _panes, _config, hover, max_width)
     local background = titlebar.inactive_bg
     local foreground = titlebar.inactive_fg
@@ -36,6 +41,11 @@ function M.setup(wezterm, titlebar)
     }
   end)
 
+  -- WezTerm calls this whenever window/pane state changes, to refresh the
+  -- right-side status bar. Builds up `cells` left-to-right: an active
+  -- leader/key-table indicator (if any), then workspace name, then the clock.
+  -- Each pcall guards against calling a window method that isn't available
+  -- yet during early startup.
   wezterm.on('update-status', function(window, _pane)
     local cells = {}
     local ok, active_key_table = pcall(function()
