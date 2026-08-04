@@ -152,6 +152,28 @@ if (( $+commands[tldr] )); then
   alias help='tldr'
 fi
 
+# Proxy toggle: `proxy` points http(s)/all_proxy at the local Clash
+# instance; `unproxy` clears them.
+proxy() {
+  export http_proxy="http://127.0.0.1:7897"
+  export https_proxy="$http_proxy"
+  export all_proxy="socks5://127.0.0.1:7897"
+  export no_proxy="localhost,127.0.0.1,::1"
+}
+unproxy() {
+  unset http_proxy https_proxy all_proxy no_proxy
+}
+
+# Auto-enable the proxy at shell startup, but only if something is actually
+# listening on 127.0.0.1:7897 — otherwise every network call would hang/
+# retry against a closed port. zsh/net/tcp does the probe as a plain local
+# connect() with no external process, so it's effectively instant.
+zmodload zsh/net/tcp 2>/dev/null
+if (( $+builtins[ztcp] )) && ztcp 127.0.0.1 7897 2>/dev/null; then
+  ztcp -c "$REPLY"
+  proxy
+fi
+
 # Reminds you when a command you just typed has a shorter existing alias.
 if [[ -r "$HOMEBREW_PREFIX/share/zsh-you-should-use/you-should-use.plugin.zsh" ]]; then
   export YSU_MESSAGE_POSITION="after"
