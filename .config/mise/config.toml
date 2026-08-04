@@ -1,0 +1,30 @@
+[tools]
+node = "24"
+python = "3.12"
+go = "1.26"
+rust = "latest"
+
+uv = "latest"
+pnpm = "latest"
+
+[settings]
+lockfile = true
+lockfile_platforms = ["macos-arm64"]
+not_found_auto_install = false
+use_versions_host_track = false
+idiomatic_version_file_enable_tools = [
+  "node",
+  "pnpm",
+  "python",
+  "go",
+  "rust",
+  "ruby",
+  "zig",
+]
+
+[settings.github]
+credential_command = 'gh auth token --hostname "$MISE_CREDENTIAL_HOST"'
+
+[env]
+GOTOOLCHAIN = "local"
+UV_PYTHON_DOWNLOADS = "never"

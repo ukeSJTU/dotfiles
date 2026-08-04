@@ -1,0 +1,143 @@
+"$schema" = "https://starship.rs/config-schema.json"
+
+format = """
+$username\
+$hostname\
+$container\
+$directory\
+$git_branch\
+$git_commit\
+$git_state\
+$git_status\
+$fill\
+$python\
+$nodejs\
+$golang\
+$rust\
+$ruby\
+$zig\
+$docker_context\
+$jobs\
+$cmd_duration\
+$line_break\
+$character"""
+
+add_newline = true
+palette = "catppuccin_mocha"
+
+[palettes.catppuccin_mocha]
+text = "#cdd6f4"
+subtext0 = "#a6adc8"
+overlay0 = "#6c7086"
+red = "#f38ba8"
+peach = "#fab387"
+yellow = "#f9e2af"
+green = "#a6e3a1"
+sapphire = "#74c7ec"
+blue = "#89b4fa"
+mauve = "#cba6f7"
+lavender = "#b4befe"
+
+[username]
+format = "[$user]($style)@"
+style_user = "bold lavender"
+style_root = "bold red"
+
+[hostname]
+format = "[$ssh_symbol$hostname]($style) "
+style = "bold lavender"
+
+[container]
+format = "[$symbol$name]($style) "
+symbol = "⬢ "
+style = "bold red"
+
+[directory]
+format = "[$path]($style)[$read_only]($read_only_style) "
+style = "bold blue"
+read_only = " 󰌾"
+read_only_style = "bold red"
+truncation_length = 3
+truncation_symbol = "…/"
+truncate_to_repo = false
+
+[fill]
+symbol = " "
+
+[git_branch]
+format = "[$symbol$branch]($style) "
+symbol = " "
+style = "bold mauve"
+
+[git_commit]
+format = "[$hash$tag]($style) "
+style = "bold mauve"
+only_detached = true
+tag_disabled = false
+tag_symbol = "  "
+
+[git_state]
+format = '\([$state( $progress_current/$progress_total)]($style)\) '
+style = "bold yellow"
+
+[git_status]
+format = "([$all_status$ahead_behind]($style) )"
+style = "bold red"
+
+[python]
+format = '[${symbol}${version}( \($virtualenv\))]($style) '
+symbol = " "
+style = "bold yellow"
+
+[nodejs]
+format = "[$symbol($version)]($style) "
+symbol = " "
+style = "bold green"
+
+[golang]
+format = "[$symbol($version)]($style) "
+symbol = " "
+style = "bold sapphire"
+
+[rust]
+format = "[$symbol($version)]($style) "
+symbol = "󱘗 "
+style = "bold peach"
+
+[ruby]
+format = "[$symbol($version)]($style) "
+symbol = " "
+style = "bold red"
+
+[zig]
+format = "[$symbol($version)]($style) "
+symbol = " "
+style = "bold peach"
+
+[docker_context]
+format = "[$symbol$context]($style) "
+symbol = " "
+style = "bold blue"
+only_with_files = true
+
+[jobs]
+format = "[$symbol$number]($style) "
+symbol = " "
+style = "bold red"
+number_threshold = 1
+
+[cmd_duration]
+min_time = 2_000
+format = "[$duration]($style) "
+style = "bold yellow"
+show_notifications = true
+min_time_to_notify = 60_000
+
+[character]
+format = "$symbol "
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
+vimcmd_symbol = "[❮](bold mauve)"
+vimcmd_replace_one_symbol = "[❬](bold mauve)"
+vimcmd_replace_symbol = "[❮](bold mauve)"
+vimcmd_visual_symbol = "[❮](bold yellow)"
