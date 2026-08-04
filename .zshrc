@@ -127,6 +127,30 @@ bindkey -e
 bindkey '^[[1;5C' forward-word
 bindkey '^[[1;5D' backward-word
 
+# Quality-of-life aliases.
+alias c='clear'
+
+# eza: a nicer `ls` — colored, git status per file, directories grouped
+# first. Icons rely on the Nerd Font already used by starship.
+if (( $+commands[eza] )); then
+  alias ls='eza --group-directories-first --icons'
+  alias ll='eza -l --group-directories-first --icons --git'
+  alias la='eza -la --group-directories-first --icons --git'
+  alias lt='eza --tree --level=2 --group-directories-first --icons'
+fi
+
+# bat: a nicer `cat` — syntax highlighting and git-diff markers in the
+# gutter. Auto-disables styling when output isn't a terminal, so it's safe
+# as a drop-in replacement even when piped.
+if (( $+commands[bat] )); then
+  alias cat='bat --paging=never'
+fi
+
+# tealdeer: example-first man pages (community-maintained cheatsheets).
+if (( $+commands[tldr] )); then
+  alias help='tldr'
+fi
+
 # Reminds you when a command you just typed has a shorter existing alias.
 if [[ -r "$HOMEBREW_PREFIX/share/zsh-you-should-use/you-should-use.plugin.zsh" ]]; then
   export YSU_MESSAGE_POSITION="after"
