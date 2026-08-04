@@ -13,6 +13,11 @@ brew "jq"
 brew "just"
 brew "go-task"
 
+brew "zsh-completions"
+brew "zsh-history-substring-search"
+brew "zsh-you-should-use"
+brew "forgit"
+
 brew "shellcheck"
 brew "shfmt"
 brew "actionlint"

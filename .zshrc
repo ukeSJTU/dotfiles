@@ -6,6 +6,11 @@ if [[ -n "$HOMEBREW_PREFIX" ]] &&
   fpath=("$HOMEBREW_PREFIX/share/zsh/site-functions" $fpath)
 fi
 
+# zsh-completions: extra completion definitions, must be added before compinit.
+if [[ -d "$HOMEBREW_PREFIX/share/zsh-completions" ]]; then
+  fpath=("$HOMEBREW_PREFIX/share/zsh-completions" $fpath)
+fi
+
 # Completion cache.
 ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
 mkdir -p "$ZSH_CACHE_DIR"
@@ -66,6 +71,56 @@ fi
 
 if [[ -r "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]]; then
   source "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+fi
+
+# History substring search — must load after zsh-syntax-highlighting.
+if [[ -r "$HOMEBREW_PREFIX/share/zsh-history-substring-search/zsh-history-substring-search.zsh" ]]; then
+  source "$HOMEBREW_PREFIX/share/zsh-history-substring-search/zsh-history-substring-search.zsh"
+  bindkey "$terminfo[kcuu1]" history-substring-search-up
+  bindkey "$terminfo[kcud1]" history-substring-search-down
+fi
+
+# Reminds you when a command you just typed has a shorter existing alias.
+if [[ -r "$HOMEBREW_PREFIX/share/zsh-you-should-use/you-should-use.plugin.zsh" ]]; then
+  export YSU_MESSAGE_POSITION="after"
+  source "$HOMEBREW_PREFIX/share/zsh-you-should-use/you-should-use.plugin.zsh"
+fi
+
+# forgit: interactive fzf-driven git commands. Its default aliases collide
+# with the git plugin below (ga, gd, gco, gcb, ...), so register our own
+# under an `fg` prefix (fga, fgd, fgco, ...) instead of forgit's defaults.
+if [[ -r "$HOMEBREW_PREFIX/opt/forgit/share/forgit/forgit.plugin.zsh" ]]; then
+  export FORGIT_NO_ALIASES=1
+  source "$HOMEBREW_PREFIX/opt/forgit/share/forgit/forgit.plugin.zsh"
+  alias fga='forgit::add'
+  alias fgrh='forgit::reset::head'
+  alias fgrs='forgit::restore'
+  alias fglo='forgit::log'
+  alias fgrl='forgit::reflog'
+  alias fgd='forgit::diff'
+  alias fgso='forgit::show'
+  alias fgi='forgit::ignore'
+  alias fgat='forgit::attributes'
+  alias fgcf='forgit::checkout::file'
+  alias fgcff='forgit::checkout::file::from::commit'
+  alias fgcb='forgit::checkout::branch'
+  alias fgsw='forgit::switch::branch'
+  alias fgco='forgit::checkout::commit'
+  alias fgct='forgit::checkout::tag'
+  alias fgbd='forgit::branch::delete'
+  alias fgrc='forgit::revert::commit'
+  alias fgclean='forgit::clean'
+  alias fgss='forgit::stash::show'
+  alias fgsp='forgit::stash::push'
+  alias fgcp='forgit::cherry::pick::from::branch'
+  alias fgrb='forgit::rebase'
+  alias fgfu='forgit::fixup'
+  alias fgsq='forgit::squash'
+  alias fgrw='forgit::reword'
+  alias fgbl='forgit::blame'
+  alias fgwt='forgit::worktree'
+  alias fgwa='forgit::worktree::add'
+  alias fgwd='forgit::worktree::delete'
 fi
 
 # Vendored git aliases (gst, gc, gco, ...) — see .config/zsh/plugins/git.plugin.zsh
