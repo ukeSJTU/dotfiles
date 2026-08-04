@@ -13,6 +13,14 @@ mkdir -p "$ZSH_CACHE_DIR"
 autoload -Uz compinit
 compinit -d "$ZSH_CACHE_DIR/zcompdump-$ZSH_VERSION"
 
+# fzf-tab must load after compinit, but before plugins that wrap widgets
+# (zsh-autosuggestions, zsh-syntax-highlighting, both sourced below).
+if [[ -r "$HOMEBREW_PREFIX/share/fzf-tab/fzf-tab.zsh" ]]; then
+  zstyle ':completion:*' menu no
+  zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color=always $realpath'
+  source "$HOMEBREW_PREFIX/share/fzf-tab/fzf-tab.zsh"
+fi
+
 # fzf
 if (( $+commands[fzf] )); then
   export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
@@ -58,5 +66,10 @@ fi
 
 if [[ -r "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]]; then
   source "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+fi
+
+# Vendored git aliases (gst, gc, gco, ...) — see .config/zsh/plugins/git.plugin.zsh
+if [[ -r "$HOME/.config/zsh/plugins/git.plugin.zsh" ]]; then
+  source "$HOME/.config/zsh/plugins/git.plugin.zsh"
 fi
 
