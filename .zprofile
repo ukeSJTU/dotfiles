@@ -9,3 +9,6 @@ source ~/.orbstack/shell/init.zsh 2>/dev/null || :
 typeset -U path PATH
 path=("$HOME/.local/bin" $path)
 
+# TeX Live (BasicTeX)
+path=("/Library/TeX/texbin" $path)
+
