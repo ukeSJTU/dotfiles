@@ -41,30 +41,3 @@ cask "raycast"
 cask "claude"
 cask "chatgpt"
 
-# Core development
-vscode "hverlin.mise-vscode"
-vscode "github.vscode-pull-request-github"
-vscode "github.vscode-github-actions"
-vscode "ms-vscode-remote.remote-ssh"
-
-# Configuration formats
-vscode "tombi-toml.tombi"
-vscode "redhat.vscode-yaml"
-
-# Python
-vscode "ms-python.python"
-vscode "ms-python.vscode-pylance"
-vscode "charliermarsh.ruff"
-
-# Go and Rust
-vscode "golang.go"
-vscode "rust-lang.rust-analyzer"
-
-# Web
-vscode "dbaeumer.vscode-eslint"
-vscode "esbenp.prettier-vscode"
-
-# Containers
-vscode "ms-vscode-remote.remote-containers"
-vscode "ms-azuretools.vscode-containers"
-

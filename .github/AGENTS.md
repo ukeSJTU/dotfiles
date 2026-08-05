@@ -89,6 +89,12 @@ Clash Verge Rev (AirDrop or otherwise) and turn on its System Proxy mode if
 the network needs it, and install/sign into Chrome. `preflight.sh` assumes
 that's already done.
 
+VS Code extensions and user settings (`settings.json`, `keybindings.json`,
+snippets) are deliberately **not** tracked in this repo — after `.homebrew/Brewfile`
+installs the `visual-studio-code` cask, sign into VS Code's built-in Settings
+Sync (same account across machines) to bring both back. This is another
+one-time manual step, same category as Clash Verge/Chrome above.
+
 ## Working in this repo
 
 - New packages/casks go in `.homebrew/Brewfile`, installed elsewhere via
