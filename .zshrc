@@ -98,6 +98,11 @@ setopt EXTENDED_GLOB
 setopt NO_CASE_GLOB
 setopt NO_BEEP
 
+# Select the emacs keymap before plugins or custom bindings modify it. Doing
+# this later would discard bindings created against a vi keymap inherited
+# from $EDITOR or $VISUAL.
+bindkey -e
+
 if [[ -r "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
   source "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 fi
@@ -112,11 +117,6 @@ if [[ -r "$HOMEBREW_PREFIX/share/zsh-history-substring-search/zsh-history-substr
   bindkey "$terminfo[kcuu1]" history-substring-search-up
   bindkey "$terminfo[kcud1]" history-substring-search-down
 fi
-
-# Explicit emacs keymap (already zsh's default, but pinned so a stray
-# $EDITOR=vi elsewhere on the machine can't silently flip this — vi-mode
-# itself is intentionally not configured for now).
-bindkey -e
 
 # Extra navigation keys beyond the emacs-mode defaults (Alt+B/F/D/Backspace
 # for word movement already work out of the box).
