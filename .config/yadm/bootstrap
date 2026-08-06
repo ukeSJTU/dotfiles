@@ -73,4 +73,5 @@ cat <<'EOF'
   - Sign into OrbStack/Docker if you need containers.
   - Open Karabiner-Elements and approve its background service,
     Accessibility access, and Driver Extension when prompted.
+  - Run `pi`, then use `/login` to authenticate your preferred model provider.
 EOF
