@@ -1,0 +1,178 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/jesseduffield/lazygit/master/schema/config.json
+
+gui:
+  scrollHeight: 10
+  scrollPastBottom: false
+  sidePanelWidth: 0.22
+  expandFocusedSidePanel: true
+  enlargedSideViewLocation: top
+  theme:
+    activeBorderColor:
+      - "#66d9ef"
+      - bold
+    inactiveBorderColor:
+      - "#75715e"
+    optionsTextColor:
+      - "#66d9ef"
+    selectedLineBgColor:
+      - "#49483e"
+    cherryPickedCommitBgColor:
+      - "#3e3d32"
+    cherryPickedCommitFgColor:
+      - "#a6e22e"
+    unstagedChangesColor:
+      - "#f92672"
+    defaultFgColor:
+      - "#f8f8f2"
+    searchingActiveBorderColor:
+      - "#e6db74"
+  branchColorPatterns:
+    "^release/": "#e6db74"
+    "^hotfix/": "#f92672"
+    "^(feat|feature)/": "#a6e22e"
+  showBottomLine: false
+  nerdFontsVersion: "3"
+  showNumstatInFilesView: true
+  commandLogSize: 5
+  showDivergenceFromBaseBranch: arrowAndNumber
+  filterMode: fuzzy
+  showPanelJumps: false
+  skipRewordInEditorWarning: true
+  border: rounded
+  statusPanelView: allBranchesLog
+
+git:
+  pagers:
+    - colorArg: always
+      pager: delta --paging=never --dark --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
+  branchLogCmd: "git log --graph --color=always --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)' {{branchName}} --"
+  parseEmoji: true
+  allBranchesLogCmds:
+    - "git log --graph --all --color=always --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)'"
+
+os:
+  editPreset: nvim-remote
+
+disableStartupPopups: true
+notARepository: skip
+promptToReturnFromSubprocess: false
+
+customCommands:
+  - key: "<c-n>"
+    context: localBranches
+    description: New branch with prefix
+    prompts:
+      - type: menu
+        title: Branch type
+        key: Kind
+        options:
+          - name: feature
+            value: feat
+          - name: hotfix
+            value: hotfix
+          - name: fix
+            value: fix
+          - name: chore
+            value: chore
+          - name: experiment
+            value: experiment
+      - type: input
+        title: Branch name
+        key: Name
+    command: 'git switch -c {{printf "%s/%s" .Form.Kind .Form.Name | quote}}'
+    loadingText: Creating branch
+
+  - key: "<c-r>"
+    context: "files, localBranches"
+    description: Create pull request on GitHub
+    prompts:
+      - type: input
+        title: Pull request title
+        key: Title
+      - type: input
+        title: Base branch (empty for default)
+        key: Base
+      - type: menu
+        title: Create as draft?
+        key: Draft
+        options:
+          - name: "No"
+            value: "no"
+          - name: "Yes"
+            value: "yes"
+    command: 'gh pr create --assignee @me --title {{.Form.Title | quote}} --fill {{if .Form.Base}}--base {{.Form.Base | quote}}{{end}} {{if eq .Form.Draft "yes"}}--draft{{end}}'
+    loadingText: Creating pull request
+
+  - key: o
+    context: localBranches
+    description: Open repository on GitHub
+    command: gh repo view --web
+    loadingText: Opening GitHub repository
+
+  - key: O
+    context: localBranches
+    description: Open pull request on GitHub
+    command: gh pr view --web
+    loadingText: Opening GitHub pull request
+
+  - key: C
+    context: global
+    description: Create conventional commit
+    prompts:
+      - type: menu
+        title: Type of change
+        key: Type
+        options:
+          - name: feat
+            value: feat
+          - name: fix
+            value: fix
+          - name: chore
+            value: chore
+          - name: build
+            value: build
+          - name: ci
+            value: ci
+          - name: docs
+            value: docs
+          - name: perf
+            value: perf
+          - name: refactor
+            value: refactor
+          - name: revert
+            value: revert
+          - name: style
+            value: style
+          - name: test
+            value: test
+      - type: input
+        title: Scope (optional)
+        key: Scope
+      - type: menu
+        title: Breaking change?
+        key: Breaking
+        options:
+          - name: "No"
+            value: "no"
+          - name: "Yes"
+            value: "yes"
+      - type: input
+        title: Commit message
+        key: Message
+      - type: confirm
+        title: Commit
+        body: Create this commit?
+    command: >
+      type={{.Form.Type | quote}};
+      scope={{.Form.Scope | quote}};
+      breaking={{.Form.Breaking | quote}};
+      message={{.Form.Message | quote}};
+      if [ "$breaking" = "yes" ]; then bang="!"; else bang=""; fi;
+      if [ -n "$scope" ]; then subject="$type($scope)$bang: $message"; else subject="$type$bang: $message"; fi;
+      git commit --message "$subject"
+    loadingText: Creating conventional commit
+
+  - key: R
+    context: files
+    description: Undo last commit, keeping changes staged
+    command: git reset --soft HEAD~1

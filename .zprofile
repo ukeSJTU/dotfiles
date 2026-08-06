@@ -1,6 +1,9 @@
 eval "$(/opt/homebrew/bin/brew shellenv zsh)"
 eval "$(mise activate zsh --shims)"
 
+# Keep portable CLI configuration under ~/.config on macOS.
+export XDG_CONFIG_HOME="$HOME/.config"
+
 # Added by OrbStack: command-line tools and integration
 # This won't be added again if you remove it.
 source ~/.orbstack/shell/init.zsh 2>/dev/null || :
@@ -11,4 +14,3 @@ path=("$HOME/.local/bin" $path)
 
 # TeX Live (BasicTeX)
 path=("/Library/TeX/texbin" $path)
-
