@@ -13,7 +13,15 @@ return {
     'echasnovski/mini.nvim',
     config = function()
       require('mini.ai').setup { n_lines = 500 }
+      local bufremove = require 'mini.bufremove'
+      bufremove.setup()
+      require('mini.pairs').setup()
+      require('mini.splitjoin').setup()
       require('mini.surround').setup()
+
+      vim.keymap.set('n', '<leader>bd', function()
+        bufremove.delete(0, false)
+      end, { desc = '[D]elete current buffer' })
 
       local statusline = require 'mini.statusline'
       statusline.setup { use_icons = vim.g.have_nerd_font }

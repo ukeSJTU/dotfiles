@@ -81,9 +81,10 @@ return {
         },
       },
       spec = {
+        { '<leader>b', group = '[B]uffer' },
         { '<leader>s', group = '[S]earch' },
         { '<leader>t', group = '[T]oggle' },
-        { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+        { '<leader>x', group = 'Diagnostics' },
       },
     },
   },
