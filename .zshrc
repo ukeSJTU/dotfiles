@@ -54,6 +54,27 @@ if (( $+commands[zoxide] )); then
   eval "$(zoxide init zsh)"
 fi
 
+# yazi: leave the shell in Yazi's last directory when quitting with `q`.
+# Quit with `Q` when the shell should stay in its original directory.
+if (( $+commands[yazi] )); then
+  y() {
+    local tmp cwd yazi_status
+    tmp="$(mktemp -t "yazi-cwd.XXXXXX")" || return
+
+    command yazi "$@" --cwd-file="$tmp"
+    yazi_status=$?
+
+    IFS= read -r -d '' cwd < "$tmp"
+    command rm -f -- "$tmp"
+
+    if [[ -n "$cwd" && "$cwd" != "$PWD" && -d "$cwd" ]]; then
+      builtin cd -- "$cwd"
+    fi
+
+    return "$yazi_status"
+  }
+fi
+
 # starship: cross-shell prompt renderer; theme/modules live in
 # .config/starship.toml.
 if (( $+commands[starship] )); then

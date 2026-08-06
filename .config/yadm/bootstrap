@@ -28,6 +28,11 @@ eval "$("$BREW_BIN" shellenv)"
 echo "==> brew bundle (installs missing Brewfile entries without upgrading existing ones)..."
 brew bundle --no-upgrade --file="$HOME/.homebrew/Brewfile"
 
+if [[ -f "$XDG_CONFIG_HOME/yazi/package.toml" ]]; then
+  echo "==> yazi: installing pinned flavors and plugins..."
+  ya pkg install
+fi
+
 echo "==> git lfs install..."
 git lfs install --skip-repo
 
