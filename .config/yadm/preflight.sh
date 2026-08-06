@@ -1,5 +1,6 @@
 #!/bin/bash
-# Phase 1 of this dotfiles repo's bootstrap: gets a brand-new Mac from
+# Phase 1 of this dotfiles repo's bootstrap: gets a brand-new Apple Silicon
+# Mac from
 # nothing to a point where `yadm clone` can succeed, then runs that clone
 # (which auto-chains into .config/yadm/bootstrap, phase 2).
 #
@@ -12,6 +13,18 @@
 # The interactive steps below (gh's device-code wait, ssh-add's Keychain
 # dialog) talk to /dev/tty directly and work fine regardless.
 set -euo pipefail
+
+# This repository intentionally supports Apple Silicon Macs only. The mise
+# lockfile and shell startup paths are both pinned to that platform.
+if [[ "$(uname -s)" != "Darwin" || "$(uname -m)" != "arm64" ]]; then
+  echo "Error: this bootstrap currently supports Apple Silicon Macs only." >&2
+  exit 1
+fi
+
+# Make every step independent of the directory from which `curl | bash` was
+# invoked, and ensure Homebrew reads ~/.config/homebrew/brew.env.
+cd "$HOME"
+export XDG_CONFIG_HOME="$HOME/.config"
 
 # --- Proxy (GFW workaround) -------------------------------------------------
 # Clash Verge Rev's default mixed port. Only used if something's actually
@@ -36,16 +49,17 @@ if ! xcode-select -p >/dev/null 2>&1; then
 fi
 
 # --- Homebrew ----------------------------------------------------------------
-if ! command -v brew >/dev/null 2>&1; then
+BREW_BIN="/opt/homebrew/bin/brew"
+if [[ ! -x "$BREW_BIN" ]]; then
   echo "==> Installing Homebrew..."
   NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
-if [[ -x /opt/homebrew/bin/brew ]]; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-elif [[ -x /usr/local/bin/brew ]]; then
-  eval "$(/usr/local/bin/brew shellenv)"
+if [[ ! -x "$BREW_BIN" ]]; then
+  echo "Error: Homebrew was not installed at the expected Apple Silicon path: $BREW_BIN" >&2
+  exit 1
 fi
+eval "$("$BREW_BIN" shellenv)"
 
 brew doctor || true
 
@@ -104,5 +118,19 @@ echo "==> Verifying SSH auth to GitHub..."
 # Always exits 1 on success (GitHub doesn't provide shell access) — that's expected.
 ssh -T git@github.com -o StrictHostKeyChecking=accept-new || true
 
-echo "==> Cloning dotfiles via yadm (this auto-runs .config/yadm/bootstrap when done)..."
-yadm clone git@github.com:ukeSJTU/dotfiles.git
+YADM_REPO="$(yadm introspect repo)"
+if [[ -d "$YADM_REPO" ]]; then
+  # A previous run may have cloned successfully and then failed during phase 2.
+  # Resume from the existing checkout instead of trying to clone over it.
+  if ! yadm rev-parse --verify HEAD >/dev/null 2>&1 || [[ ! -x "$HOME/.config/yadm/bootstrap" ]]; then
+    echo "Error: an incomplete yadm repository exists at $YADM_REPO." >&2
+    echo "Refusing to overwrite it automatically; inspect or remove it, then retry." >&2
+    exit 1
+  fi
+
+  echo "==> Existing yadm checkout detected — resuming bootstrap..."
+  yadm bootstrap
+else
+  echo "==> Cloning dotfiles via yadm and automatically running bootstrap..."
+  yadm clone --bootstrap git@github.com:ukeSJTU/dotfiles.git
+fi

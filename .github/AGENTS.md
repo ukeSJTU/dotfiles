@@ -2,7 +2,7 @@
 
 ## What this repo is
 
-Personal macOS dotfiles, managed with [yadm](https://yadm.io/). Files here mirror
+Personal Apple Silicon macOS dotfiles, managed with [yadm](https://yadm.io/). Files here mirror
 their target location under `$HOME` directly (e.g. `.zshrc` → `~/.zshrc`,
 `.config/wezterm/` → `~/.config/wezterm/`) — no templating engine, no symlink
 farm, just yadm's own bare-repo-over-`$HOME` mechanism on the machines where
@@ -75,11 +75,14 @@ brand-new machine):
    ```
    It installs Xcode CLT and Homebrew, installs `git`/`gh`/`yadm`,
    authenticates `gh`, generates and registers a GitHub SSH key, then runs
-   `yadm clone` itself — which auto-chains into step 2.
+   `yadm clone --bootstrap` itself — which auto-chains into step 2 without a
+   confirmation prompt. If a previous attempt already cloned the yadm repo,
+   rerunning preflight resumes at step 2 rather than cloning over it.
 2. **`.config/yadm/bootstrap`** — yadm's native bootstrap hook, runs
    automatically right after `yadm clone` (also re-runnable later via
    `yadm bootstrap`, e.g. after adding new `Brewfile` entries). Runs
-   `brew bundle`, `git lfs install`, a `compaudit`-based fix for zsh's
+   `brew bundle --no-upgrade`, `git lfs install --skip-repo`, a
+   `compaudit`-based fix for zsh's
    insecure-completion-directory warning, and `mise lock --global && mise
    install --locked`.
 

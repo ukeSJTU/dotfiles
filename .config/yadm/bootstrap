@@ -6,22 +6,56 @@
 # entries to .homebrew/Brewfile.
 set -euo pipefail
 
-if [[ -x /opt/homebrew/bin/brew ]]; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-elif [[ -x /usr/local/bin/brew ]]; then
-  eval "$(/usr/local/bin/brew shellenv)"
+# This repository intentionally supports Apple Silicon Macs only. Keep this
+# guard here too because `yadm bootstrap` can be run without preflight.sh.
+if [[ "$(uname -s)" != "Darwin" || "$(uname -m)" != "arm64" ]]; then
+  echo "Error: this bootstrap currently supports Apple Silicon Macs only." >&2
+  exit 1
 fi
 
-echo "==> brew bundle (installs everything declared in .homebrew/Brewfile)..."
-brew bundle --file="$HOME/.homebrew/Brewfile"
+# Stabilize commands whose behavior depends on the current directory or XDG
+# paths, especially Homebrew, git-lfs, and mise.
+cd "$HOME"
+export XDG_CONFIG_HOME="$HOME/.config"
+
+BREW_BIN="/opt/homebrew/bin/brew"
+if [[ ! -x "$BREW_BIN" ]]; then
+  echo "Error: Homebrew is missing from the expected Apple Silicon path: $BREW_BIN" >&2
+  exit 1
+fi
+eval "$("$BREW_BIN" shellenv)"
+
+echo "==> brew bundle (installs missing Brewfile entries without upgrading existing ones)..."
+brew bundle --no-upgrade --file="$HOME/.homebrew/Brewfile"
 
 echo "==> git lfs install..."
-git lfs install
+git lfs install --skip-repo
 
 echo "==> Fixing any insecure zsh completion directories flagged by compaudit..."
-zsh -c 'compaudit' 2>/dev/null | while IFS= read -r dir; do
-  chmod g-w,o-w "$dir"
-done
+COMPAUDIT_STATUS=0
+INSECURE_PATHS="$(
+  zsh -f -c '
+    fpath=(
+      "$HOMEBREW_PREFIX/share/zsh/site-functions"
+      "$HOMEBREW_PREFIX/share/zsh-completions"
+      $fpath
+    )
+    autoload -Uz compaudit
+    compaudit
+  ' 2>/dev/null
+)" || COMPAUDIT_STATUS=$?
+
+# compaudit returns 1 when it successfully finds insecure paths. Any other
+# non-zero status means the audit itself failed and should stop bootstrap.
+if [[ "$COMPAUDIT_STATUS" -gt 1 ]]; then
+  echo "Error: compaudit failed with status $COMPAUDIT_STATUS." >&2
+  exit "$COMPAUDIT_STATUS"
+fi
+
+while IFS= read -r insecure_path; do
+  [[ -n "$insecure_path" ]] || continue
+  chmod g-w,o-w "$insecure_path"
+done <<<"$INSECURE_PATHS"
 
 echo "==> mise: installing pinned tool versions from the committed lockfile..."
 mise install --locked
