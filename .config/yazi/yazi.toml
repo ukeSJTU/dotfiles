@@ -4,3 +4,13 @@
 sort_by     = "natural"
 show_hidden = true
 scrolloff   = 10
+
+[[plugin.prepend_fetchers]]
+url   = "*"
+run   = "git"
+group = "git"
+
+[[plugin.prepend_fetchers]]
+url   = "*/"
+run   = "git"
+group = "git"

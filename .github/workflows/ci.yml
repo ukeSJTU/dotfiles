@@ -50,7 +50,8 @@ jobs:
             --check \
             --config-path .config/nvim/.stylua.toml \
             .config/nvim \
-            .config/wezterm
+            .config/wezterm \
+            .config/yazi/init.lua
 
       - name: Check Brewfile
         run: |
