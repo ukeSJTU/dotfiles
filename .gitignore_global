@@ -16,3 +16,6 @@ Icon?
 *~
 *.swp
 *.swo
+
+# Local AI-assistant permissions and overrides
+**/.claude/settings.local.json

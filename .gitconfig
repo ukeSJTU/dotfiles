@@ -3,7 +3,9 @@
 [fetch]
 	prune = true
 [push]
+	default = current
 	autoSetupRemote = true
+	followTags = true
 [pull]
 	rebase = true
 [rerere]
@@ -12,10 +14,16 @@
 	email = uke_sjtu@sjtu.edu.cn
 	name = ukeSJTU
 [merge]
+	tool = vscode
 	conflictStyle = zdiff3
+[mergetool "vscode"]
+	cmd = code --wait --merge $REMOTE $LOCAL $BASE $MERGED
 [diff]
+	tool = vscode
 	algorithm = histogram
 	colorMoved = default
+[difftool "vscode"]
+	cmd = code --wait --diff $LOCAL $REMOTE
 [column]
 	ui = auto
 [help]
@@ -29,14 +37,29 @@
 [core]
 	pager = delta
 	excludesfile = ~/.gitignore_global
+	quotePath = false
+[pager]
+	branch = false
+	log = false
+	diff = delta
+	show = delta
 [interactive]
 	diffFilter = delta --color-only
 [delta]
 	navigate = true
 	line-numbers = true
 	side-by-side = false
+[rebase]
+	autoSquash = true
+	updateRefs = true
+[submodule]
+	recurse = true
+[status]
+	submoduleSummary = true
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+[include]
+	path = ~/.gitconfig.local
