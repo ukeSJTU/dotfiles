@@ -1,23 +1,26 @@
 return {
   {
-    'folke/lazydev.nvim',
-    ft = 'lua',
-    opts = {
-      library = {
-        { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
-      },
-    },
-  },
-  {
     'neovim/nvim-lspconfig',
     dependencies = {
       { 'mason-org/mason.nvim', opts = {} },
       'mason-org/mason-lspconfig.nvim',
-      'WhoIsSethDaniel/mason-tool-installer.nvim',
       { 'j-hui/fidget.nvim', opts = {} },
       'saghen/blink.cmp',
     },
     config = function()
+      local function python_tool(tool, args)
+        return function(dispatchers, config)
+          local command = tool
+          if config.root_dir then
+            local project_command = vim.fs.joinpath(config.root_dir, '.venv', 'bin', tool)
+            if vim.fn.executable(project_command) == 1 then
+              command = project_command
+            end
+          end
+          return vim.lsp.rpc.start(vim.list_extend({ command }, args), dispatchers)
+        end
+      end
+
       local lsp_group = vim.api.nvim_create_augroup('lsp-attach', { clear = true })
       local highlight_group = vim.api.nvim_create_augroup('lsp-highlight', { clear = true })
 
@@ -28,8 +31,6 @@ return {
             vim.keymap.set(mode or 'n', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
           end
 
-          map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
-          map('gra', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
           map('grr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
           map('gri', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
           map('grd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
@@ -90,6 +91,24 @@ return {
 
       local capabilities = require('blink.cmp').get_lsp_capabilities()
       local servers = {
+        vtsls = {},
+        biome = {},
+        eslint = {},
+        oxlint = {},
+        ty = {
+          cmd = python_tool('ty', { 'server' }),
+          settings = {
+            ty = {
+              diagnosticMode = 'workspace',
+            },
+          },
+        },
+        ruff = {
+          cmd = python_tool('ruff', { 'server' }),
+          on_attach = function(client)
+            client.server_capabilities.hoverProvider = false
+          end,
+        },
         tinymist = {},
         lua_ls = {
           settings = {
@@ -105,7 +124,6 @@ return {
         vim.lsp.config(name, server)
       end
 
-      require('mason-tool-installer').setup { ensure_installed = { 'stylua' } }
       local server_names = vim.tbl_keys(servers)
       require('mason-lspconfig').setup {
         ensure_installed = server_names,

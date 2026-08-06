@@ -1,23 +1,47 @@
--- 核心功能插件：语法高亮、快捷键提示等
+local treesitter_parsers = {
+  'bash',
+  'c',
+  'css',
+  'diff',
+  'html',
+  'javascript',
+  'jsdoc',
+  'json',
+  'lua',
+  'luadoc',
+  'markdown',
+  'markdown_inline',
+  'python',
+  'query',
+  'toml',
+  'tsx',
+  'typescript',
+  'typst',
+  'vim',
+  'vimdoc',
+  'yaml',
+}
+
 return {
-  -- Highlight, edit, and navigate code
   {
     'nvim-treesitter/nvim-treesitter',
-    branch = 'master', -- Keep the stable configuration API used below.
+    lazy = false,
     build = ':TSUpdate',
-    main = 'nvim-treesitter.configs',
-    opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'typst', 'vim', 'vimdoc' },
-      auto_install = true,
-      highlight = {
-        enable = true,
-        additional_vim_regex_highlighting = { 'ruby' },
-      },
-      indent = { enable = true, disable = { 'ruby' } },
-    },
+    config = function()
+      require('nvim-treesitter').install(treesitter_parsers)
+
+      vim.api.nvim_create_autocmd('FileType', {
+        desc = 'Enable Treesitter highlighting and indentation when a parser is available',
+        group = vim.api.nvim_create_augroup('treesitter-start', { clear = true }),
+        callback = function(event)
+          if pcall(vim.treesitter.start, event.buf) then
+            vim.bo[event.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+          end
+        end,
+      })
+    end,
   },
 
-  -- Useful plugin to show you pending keybinds
   {
     'folke/which-key.nvim',
     event = 'VimEnter',

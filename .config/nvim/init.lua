@@ -1,7 +1,6 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
--- Load editor settings before plugins inspect them.
 require 'config.options'
 require 'config.keymaps'
 require 'config.autocmds'
