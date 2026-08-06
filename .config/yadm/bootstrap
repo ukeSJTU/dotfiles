@@ -23,8 +23,7 @@ zsh -c 'compaudit' 2>/dev/null | while IFS= read -r dir; do
   chmod g-w,o-w "$dir"
 done
 
-echo "==> mise: locking and installing pinned tool versions..."
-mise lock --global
+echo "==> mise: installing pinned tool versions from the committed lockfile..."
 mise install --locked
 
 cat <<'EOF'
