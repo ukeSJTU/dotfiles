@@ -25,6 +25,7 @@ brew "forgit"
 brew "shellcheck"
 brew "shfmt"
 brew "actionlint"
+brew "stylua"
 brew "neovim"
 
 brew "lazygit"

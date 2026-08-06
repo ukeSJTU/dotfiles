@@ -1,0 +1,69 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Static checks
+    runs-on: macos-latest
+    timeout-minutes: 10
+
+    env:
+      HOMEBREW_NO_AUTO_UPDATE: "1"
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install linters
+        run: brew install shellcheck shfmt actionlint stylua
+
+      - name: Check shell scripts
+        run: |
+          bash -n \
+            .config/yadm/preflight.sh \
+            .config/yadm/bootstrap
+
+          shellcheck \
+            .config/yadm/preflight.sh \
+            .config/yadm/bootstrap
+
+          shfmt -d -i 2 -ci \
+            .config/yadm/preflight.sh \
+            .config/yadm/bootstrap
+
+      - name: Check Lua formatting and syntax
+        run: |
+          stylua \
+            --check \
+            --config-path .config/nvim/.stylua.toml \
+            .config/nvim \
+            .config/wezterm
+
+      - name: Check Brewfile
+        run: |
+          brew bundle list \
+            --file=.homebrew/Brewfile \
+            --all >/dev/null
+
+      - name: Check workflow definitions
+        run: actionlint
+
+      - name: Check trailing whitespace
+        run: |
+          if git grep -nI -E '[[:blank:]]+$'; then
+            echo "::error::Trailing whitespace found"
+            exit 1
+          fi
