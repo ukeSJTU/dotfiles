@@ -21,7 +21,7 @@ if nc -z 127.0.0.1 "$PROXY_PORT" 2>/dev/null; then
   echo "==> Detected a local proxy on port $PROXY_PORT — routing installs through it."
   export http_proxy="http://127.0.0.1:${PROXY_PORT}"
   export https_proxy="http://127.0.0.1:${PROXY_PORT}"
-  export all_proxy="socks5://127.0.0.1:${PROXY_PORT}"
+  export all_proxy="$http_proxy"
 else
   echo "==> No local proxy detected on port $PROXY_PORT — continuing without one."
 fi

@@ -157,7 +157,7 @@ fi
 proxy() {
   export http_proxy="http://127.0.0.1:7897"
   export https_proxy="$http_proxy"
-  export all_proxy="socks5://127.0.0.1:7897"
+  export all_proxy="$http_proxy"
   export no_proxy="localhost,127.0.0.1,::1"
 }
 unproxy() {
@@ -221,4 +221,3 @@ fi
 if [[ -r "$HOME/.config/zsh/plugins/git.plugin.zsh" ]]; then
   source "$HOME/.config/zsh/plugins/git.plugin.zsh"
 fi
-
