@@ -25,6 +25,7 @@ brew "forgit"
 brew "shellcheck"
 brew "shfmt"
 brew "actionlint"
+brew "neovim"
 
 brew "lazygit"
 brew "git-delta"
@@ -40,4 +41,3 @@ cask "shottr"
 cask "raycast"
 cask "claude"
 cask "chatgpt"
-
