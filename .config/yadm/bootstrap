@@ -33,4 +33,6 @@ cat <<'EOF'
   - Confirm Chrome is set as the default browser and signed in.
   - Open VS Code once if any extension didn't install cleanly.
   - Sign into OrbStack/Docker if you need containers.
+  - Open Karabiner-Elements and approve its background service,
+    Accessibility access, and Driver Extension when prompted.
 EOF
