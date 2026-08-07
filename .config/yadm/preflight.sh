@@ -95,8 +95,10 @@ if ! grep -q '^Host github\.com$' "$SSH_CONFIG" 2>/dev/null; then
   cat >>"$SSH_CONFIG" <<EOF
 
 Host github.com
-  HostName github.com
+  HostName ssh.github.com
   User git
+  Port 443
+  ProxyCommand nc -X connect -x 127.0.0.1:7897 %h %p
   AddKeysToAgent yes
   UseKeychain yes
   IdentityFile $SSH_KEY
