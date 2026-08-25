@@ -109,7 +109,9 @@ return {
             client.server_capabilities.hoverProvider = false
           end,
         },
-        tinymist = {},
+        tinymist = {
+          cmd = { 'tinymist' },
+        },
         lua_ls = {
           settings = {
             Lua = {
@@ -125,10 +127,16 @@ return {
       end
 
       local server_names = vim.tbl_keys(servers)
+      local external_servers = { tinymist = true }
+      local mason_server_names = vim.tbl_filter(function(name)
+        return not external_servers[name]
+      end, server_names)
+
       require('mason-lspconfig').setup {
-        ensure_installed = server_names,
-        automatic_enable = server_names,
+        ensure_installed = mason_server_names,
+        automatic_enable = mason_server_names,
       }
+      vim.lsp.enable(vim.tbl_keys(external_servers))
     end,
   },
 }
