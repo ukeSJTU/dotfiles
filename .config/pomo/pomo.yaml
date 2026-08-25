@@ -1,0 +1,31 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Bahaaio/pomo/main/config/schema.json
+
+onSessionEnd: ask
+
+asciiArt:
+  enabled: true
+  font: mono12
+  color: "#5A56E0"
+
+work:
+  duration: 50m
+  title: focus
+  notification:
+    enabled: true
+    urgent: false
+    title: Focus finished
+    message: Time for a break
+
+break:
+  duration: 10m
+  title: break
+  notification:
+    enabled: true
+    urgent: false
+    title: Break finished
+    message: Back to work
+
+longBreak:
+  enabled: true
+  after: 4
+  duration: 20m

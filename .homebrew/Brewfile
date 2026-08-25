@@ -1,3 +1,5 @@
+tap "bahaaio/pomo"
+
 brew "mise"
 brew "direnv"
 brew "git"
@@ -50,3 +52,4 @@ cask "raycast"
 cask "karabiner-elements"
 cask "claude"
 cask "chatgpt"
+cask "pomo"
