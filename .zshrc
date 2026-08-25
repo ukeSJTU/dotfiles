@@ -8,6 +8,31 @@ if [[ -n "$HOMEBREW_PREFIX" ]] &&
   fpath=("$HOMEBREW_PREFIX/share/zsh/site-functions" $fpath)
 fi
 
+# Keep ad-hoc Homebrew changes in sync with the declarative package list.
+# The reminder goes to stderr so it does not contaminate brew's stdout.
+brew() {
+  local action="${1-}"
+  local brew_status
+
+  command brew "$@"
+  brew_status=$?
+
+  if (( brew_status == 0 )) && [[ -o interactive ]]; then
+    case "$action" in
+      install)
+        builtin print -r -u2 -- \
+          "Reminder: add this package to ukeSJTU/dotfiles/.homebrew/Brewfile."
+        ;;
+      uninstall|remove|rm)
+        builtin print -r -u2 -- \
+          "Reminder: review ukeSJTU/dotfiles/.homebrew/Brewfile after this uninstall."
+        ;;
+    esac
+  fi
+
+  return "$brew_status"
+}
+
 # zsh-completions: extra completion definitions, must be added before compinit.
 if [[ -d "$HOMEBREW_PREFIX/share/zsh-completions" ]]; then
   fpath=("$HOMEBREW_PREFIX/share/zsh-completions" $fpath)
