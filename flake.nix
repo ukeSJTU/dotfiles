@@ -58,7 +58,7 @@
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
-              backupFileExtension = "yadm-backup";
+              backupFileExtension = "hm-backup";
               extraSpecialArgs = {
                 inherit
                   inputs

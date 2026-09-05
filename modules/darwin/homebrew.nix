@@ -27,8 +27,8 @@
       autoUpdate = false;
       upgrade = false;
 
-      # Keep imperative packages during the migration. Change this to
-      # "check" first, then "uninstall", once every formula has moved.
+      # Preserve software installed outside this configuration instead of
+      # treating the declared cask and shell bundle as an exclusive set.
       cleanup = "none";
 
       extraEnv = {

@@ -26,11 +26,7 @@ The checkout path is currently part of the configuration and must be
 `~/Documents/dotfiles`. Change `dotfilesDir` in `flake.nix` if the repository
 moves.
 
-## First trial on the current Mac
-
-The `yadm-bkp` branch contains the complete pre-Nix setup. Do not pull `main`
-with the existing yadm worktree; `main` is no longer laid out as a home
-directory.
+## Bootstrap
 
 Install the initial Nix implementation with Lix's reversible installer:
 
@@ -57,10 +53,9 @@ mise install --locked
 ya pkg install
 ```
 
-During the first activation, Home Manager renames conflicting yadm-era files
-with the suffix `.yadm-backup`. It does not silently overwrite them. Homebrew
-cleanup is also disabled during the migration, so existing imperative
-formulae are left installed.
+Home Manager renames conflicting files with the suffix `.hm-backup` instead
+of silently overwriting them. Homebrew cleanup is disabled so software
+installed outside this configuration is preserved.
 
 For a fresh Mac, clone this repository to the expected path and run
 `./bootstrap.sh`. Interactive logins and macOS privacy permissions remain
