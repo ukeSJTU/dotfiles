@@ -11,7 +11,7 @@
 [rerere]
 	enabled = true
 [user]
-	email = uke_sjtu@sjtu.edu.cn
+	email = 151891730+ukeSJTU@users.noreply.github.com
 	name = ukeSJTU
 [merge]
 	tool = vscode

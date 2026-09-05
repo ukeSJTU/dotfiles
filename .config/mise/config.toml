@@ -7,6 +7,7 @@ rust = "latest"
 uv = "latest"
 pnpm = "latest"
 bun = "latest"
+vercel = { version = "latest", allow_builds = ["esbuild"], trust_policy_excludes = ["undici"] }
 
 [settings]
 lockfile = true
