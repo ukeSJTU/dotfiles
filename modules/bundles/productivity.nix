@@ -5,7 +5,12 @@
 }:
 {
   homebrew = {
-    taps = [ "bahaaio/pomo" ];
+    taps = [
+      {
+        name = "bahaaio/pomo";
+        trusted = true;
+      }
+    ];
     casks = [ "pomo" ];
   };
 
