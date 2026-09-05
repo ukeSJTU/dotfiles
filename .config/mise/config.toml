@@ -7,7 +7,6 @@ rust = "latest"
 uv = "latest"
 pnpm = "latest"
 bun = "latest"
-"npm:@earendil-works/pi-coding-agent" = "latest"
 
 [settings]
 lockfile = true
