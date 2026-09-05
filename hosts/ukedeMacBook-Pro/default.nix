@@ -2,6 +2,7 @@
   imports = [
     ../../modules/darwin/core.nix
     ../../modules/darwin/homebrew.nix
+    ../../modules/darwin/preferences.nix
 
     ../../modules/bundles/core-cli.nix
     ../../modules/bundles/mise.nix
