@@ -9,6 +9,7 @@
   # macOS-oriented and the existing hand-tuned load order is known-good.
   homebrew.brews = [
     "forgit"
+    "fzf"
     "fzf-tab"
     "zsh-autosuggestions"
     "zsh-completions"
@@ -23,7 +24,6 @@
       direnv
       eza
       fd
-      fzf
       tealdeer
       zoxide
     ];
