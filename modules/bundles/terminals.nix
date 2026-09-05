@@ -19,7 +19,11 @@
 
   home-manager.users.${username} = { config, ... }: {
     xdg.configFile = {
-      "karabiner".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/.config/karabiner";
+      # Karabiner writes downloaded complex-modification assets next to its
+      # config, so manage only the file and keep the containing directory
+      # mutable.
+      "karabiner/karabiner.json".source =
+        config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/.config/karabiner/karabiner.json";
       "wezterm".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/.config/wezterm";
     };
   };
