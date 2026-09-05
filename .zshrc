@@ -1,37 +1,4 @@
-# mise: per-project runtime version manager (node, python, go, rust, ...).
-# Must run first so its shims are on PATH before anything below relies on them.
-eval "$(mise activate zsh)"
-
-# Homebrew-provided Zsh completions.
-if [[ -n "$HOMEBREW_PREFIX" ]] &&
-   [[ -d "$HOMEBREW_PREFIX/share/zsh/site-functions" ]]; then
-  fpath=("$HOMEBREW_PREFIX/share/zsh/site-functions" $fpath)
-fi
-
-# Keep ad-hoc Homebrew changes in sync with the declarative package list.
-# The reminder goes to stderr so it does not contaminate brew's stdout.
-brew() {
-  local action="${1-}"
-  local brew_status
-
-  command brew "$@"
-  brew_status=$?
-
-  if (( brew_status == 0 )) && [[ -o interactive ]]; then
-    case "$action" in
-      install)
-        builtin print -r -u2 -- \
-          "Reminder: add this package to ukeSJTU/dotfiles/.homebrew/Brewfile."
-        ;;
-      uninstall|remove|rm)
-        builtin print -r -u2 -- \
-          "Reminder: review ukeSJTU/dotfiles/.homebrew/Brewfile after this uninstall."
-        ;;
-    esac
-  fi
-
-  return "$brew_status"
-}
+HOMEBREW_PREFIX="${HOMEBREW_PREFIX:-/opt/homebrew}"
 
 # zsh-completions: extra completion definitions, must be added before compinit.
 if [[ -d "$HOMEBREW_PREFIX/share/zsh-completions" ]]; then
@@ -77,39 +44,6 @@ fi
 # zoxide must be initialized after compinit.
 if (( $+commands[zoxide] )); then
   eval "$(zoxide init zsh)"
-fi
-
-# yazi: leave the shell in Yazi's last directory when quitting with `q`.
-# Quit with `Q` when the shell should stay in its original directory.
-if (( $+commands[yazi] )); then
-  y() {
-    local tmp cwd yazi_status
-    tmp="$(mktemp -t "yazi-cwd.XXXXXX")" || return
-
-    command yazi "$@" --cwd-file="$tmp"
-    yazi_status=$?
-
-    IFS= read -r -d '' cwd < "$tmp"
-    command rm -f -- "$tmp"
-
-    if [[ -n "$cwd" && "$cwd" != "$PWD" && -d "$cwd" ]]; then
-      builtin cd -- "$cwd"
-    fi
-
-    return "$yazi_status"
-  }
-fi
-
-# starship: cross-shell prompt renderer; theme/modules live in
-# .config/starship.toml.
-if (( $+commands[starship] )); then
-  eval "$(starship init zsh)"
-fi
-
-# direnv must be hooked last so its PATH/env mutations aren't clobbered by
-# later tool inits.
-if (( $+commands[direnv] )); then
-  eval "$(direnv hook zsh)"
 fi
 
 # Persistent history.
@@ -261,9 +195,4 @@ if [[ -r "$HOMEBREW_PREFIX/opt/forgit/share/forgit/forgit.plugin.zsh" ]]; then
   alias fgwt='forgit::worktree'
   alias fgwa='forgit::worktree::add'
   alias fgwd='forgit::worktree::delete'
-fi
-
-# Vendored git aliases (gst, gc, gco, ...) — see .config/zsh/plugins/git.plugin.zsh
-if [[ -r "$HOME/.config/zsh/plugins/git.plugin.zsh" ]]; then
-  source "$HOME/.config/zsh/plugins/git.plugin.zsh"
 fi

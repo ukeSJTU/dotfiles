@@ -15,52 +15,41 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  lint:
-    name: Static checks
+  check:
+    name: Nix and static checks
     runs-on: macos-latest
-    timeout-minutes: 10
-
-    env:
-      HOMEBREW_NO_AUTO_UPDATE: "1"
+    timeout-minutes: 20
 
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: Install linters
-        run: brew install shellcheck shfmt actionlint stylua
+      - name: Install Lix
+        uses: samueldr/lix-gha-installer-action@a0fee77b2a98bb7c5c0ed7ae6d6ad4903dbdad0d # v2026-06-15
 
-      - name: Check shell scripts
+      - name: Evaluate the flake
+        run: nix flake check --all-systems --no-build --show-trace
+
+      - name: Check Nix formatting
+        run: nix fmt -- --ci
+
+      - name: Check bootstrap script
         run: |
-          bash -n \
-            .config/yadm/preflight.sh \
-            .config/yadm/bootstrap
-
-          shellcheck \
-            .config/yadm/preflight.sh \
-            .config/yadm/bootstrap
-
-          shfmt -d -i 2 -ci \
-            .config/yadm/preflight.sh \
-            .config/yadm/bootstrap
+          nix develop --command bash -n bootstrap.sh
+          nix develop --command shellcheck bootstrap.sh
+          nix develop --command shfmt -d -i 2 -ci bootstrap.sh
 
       - name: Check Lua formatting and syntax
         run: |
-          stylua \
+          nix develop --command stylua \
             --check \
             --config-path .config/nvim/.stylua.toml \
             .config/nvim \
             .config/wezterm \
             .config/yazi/init.lua
 
-      - name: Check Brewfile
-        run: |
-          brew bundle list \
-            --file=.homebrew/Brewfile \
-            --all >/dev/null
-
       - name: Check workflow definitions
-        run: actionlint
+        run: nix develop --command actionlint
 
       - name: Check trailing whitespace
         run: |
