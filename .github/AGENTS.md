@@ -3,8 +3,9 @@
 ## What this repo is
 
 Personal Apple Silicon macOS configuration managed with nix-darwin and Home
-Manager. Lix provides the Nix implementation, nix-homebrew owns Homebrew, and
-Homebrew remains responsible for GUI casks.
+Manager. Lix provides the reversible bootstrap installer, nix-darwin manages
+upstream Nix, nix-homebrew owns Homebrew, and Homebrew remains responsible for
+GUI casks.
 
 This is no longer a yadm worktree or a directory that mirrors `$HOME`. The
 complete pre-migration configuration is preserved on the `yadm-bkp` branch.

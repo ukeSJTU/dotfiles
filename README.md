@@ -1,7 +1,8 @@
 # macOS configuration
 
-Declarative Apple Silicon macOS environment built with nix-darwin, Home
-Manager, nix-homebrew, and Lix.
+Declarative Apple Silicon macOS environment built with Nix, nix-darwin, Home
+Manager, and nix-homebrew. Lix's reversible installer bootstraps Nix on a new
+machine; nix-darwin then manages the upstream Nix version pinned by nixpkgs.
 
 The repository is organized around bundles rather than independent dotfiles.
 A bundle owns the package, its configuration link, and any shell integration.
@@ -31,7 +32,7 @@ The `yadm-bkp` branch contains the complete pre-Nix setup. Do not pull `main`
 with the existing yadm worktree; `main` is no longer laid out as a home
 directory.
 
-Install Lix using its interactive installer:
+Install the initial Nix implementation with Lix's reversible installer:
 
 ```bash
 curl --proto '=https' --tlsv1.2 -sSf -L https://install.lix.systems/lix |

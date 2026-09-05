@@ -5,7 +5,9 @@
 }:
 {
   nix = {
-    package = pkgs.lix;
+    # Lix provides the reversible bootstrap; nix-darwin then follows the
+    # upstream Nix build pinned by nixpkgs.
+    package = pkgs.nix;
     settings.experimental-features = [
       "nix-command"
       "flakes"

@@ -30,7 +30,8 @@
 
     xdg.configFile = {
       "lazygit".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/.config/lazygit";
-      "zsh".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/.config/zsh";
+      "zsh/plugins/git.plugin.zsh".source =
+        config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/.config/zsh/plugins/git.plugin.zsh";
     };
 
     programs.zsh.initContent = lib.mkOrder 1300 ''
