@@ -1,4 +1,9 @@
-{ username, ... }:
+{
+  config,
+  lib,
+  username,
+  ...
+}:
 {
   # nix-homebrew owns Homebrew itself; nix-darwin owns its package manifest.
   nix-homebrew = {
@@ -31,4 +36,14 @@
       };
     };
   };
+
+  # nix-homebrew moves Homebrew's code into the Nix store when migrating an
+  # existing installation. Repair the legacy completion link if it still
+  # points at the old repository layout.
+  system.activationScripts.homebrew.text = lib.mkAfter ''
+    brew_completion="/opt/homebrew/share/zsh/site-functions/_brew"
+    if [[ -L "$brew_completion" && ! -e "$brew_completion" ]]; then
+      /bin/ln -sfn ${config.nix-homebrew.package}/completions/zsh/_brew "$brew_completion"
+    fi
+  '';
 }
